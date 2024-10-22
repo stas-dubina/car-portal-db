@@ -1,27 +1,23 @@
-import { NextResponse } from 'next/server';
-import { connect } from "@/lib/db/connection";
+import {NextResponse} from 'next/server';
+import {RangeParser} from '@/lib/range';
+import {getAll, getCount} from "@/app/api/brands/service";
 
 export async function GET(request: Request) {
-    const db = await connect();
-    const { searchParams } = new URL(request.url);
+    const {searchParams} = request.nextUrl;
     const ids = searchParams.getAll('id');
+    const rangeParam = searchParams.get('range');
+    const range = RangeParser(rangeParam)
 
-    let query = db.selectFrom('brand')
-        .select([
-            'brand_id as id',
-            'brand_name as name'
-        ]);
+    const totalCount = await getCount(ids);
+    const brands = await getAll(ids, range);
 
-    if (ids.length > 0) {
-        query = query.where('brand_id', 'in', ids.map(Number));
-    }
-    
-    const brands = await query.orderBy('brand_id asc').execute();
-
-    return NextResponse.json(brands, {
-        status: 200,
-        headers: {
-            'X-Total-Count': `${brands.length}`
-        }
-    });
+    return NextResponse.json(
+        brands,
+        {
+            status: 200,
+            headers: {
+                'Access-Control-Expose-Headers': 'Content-Range',
+                'Content-Range': `brands ${rangeParam}/${totalCount}`
+            }
+        });
 }

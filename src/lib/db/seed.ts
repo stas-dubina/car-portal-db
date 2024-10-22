@@ -211,12 +211,77 @@ export async function seed() {
 
     console.log(`Додано ${insertCities.length} міст до таблиці city`);
     
+    // Данные для таблицы car_type
+    const carTypeData = [
+        { car_type_name: 'Легковий' },
+        { car_type_name: 'Вантажний' },
+        { car_type_name: 'Мотоцикл' },
+        { car_type_name: 'Автобус' }
+    ];
+
+    const insertCarTypes = await db
+        .insertInto('car_type')
+        .values(carTypeData)
+        .execute();
+
+    console.log(`Додано ${insertCarTypes.length} типів автомобілів до таблиці car_type`);
+
+    // Данные для таблицы body_type
+    const bodyTypeData = [
+        { body_type_name: 'Седан', body_car_type_id: 1 },
+        { body_type_name: 'Хетчбек', body_car_type_id: 1 },
+        { body_type_name: 'Універсал', body_car_type_id: 1 },
+        { body_type_name: 'Купе', body_car_type_id: 1 },
+        { body_type_name: 'Кабріолет', body_car_type_id: 1 },
+        { body_type_name: 'Позашляховик', body_car_type_id: 1 },
+        { body_type_name: 'Мінівен', body_car_type_id: 1 },
+        { body_type_name: 'Пікап', body_car_type_id: 1 },
+        { body_type_name: 'Фургон', body_car_type_id: 2 },
+        { body_type_name: 'Тягач', body_car_type_id: 2 }
+    ];
+
+    const insertBodyTypes = await db
+        .insertInto('body_type')
+        .values(bodyTypeData)
+        .execute();
+
+    console.log(`Додано ${insertBodyTypes.length} типів кузова до таблиці body_type`);
+
+    // Данные для таблицы feature
+    const featureData = [
+        { feature_name: 'Кондиціонер' },
+        { feature_name: 'Клімат-контроль' },
+        { feature_name: 'Підігрів сидінь' },
+        { feature_name: 'Круїз-контроль' },
+        { feature_name: 'Парктронік' },
+        { feature_name: 'Камера заднього виду' },
+        { feature_name: 'Шкіряний салон' },
+        { feature_name: 'Люк' },
+        { feature_name: 'Навігаційна система' },
+        { feature_name: 'Bluetooth' },
+        { feature_name: 'USB' },
+        { feature_name: 'Бортовий комп\'ютер' },
+        { feature_name: 'Підсилювач керма' },
+        { feature_name: 'Електропривід дзеркал' },
+        { feature_name: 'Електропривід сидінь' }
+    ];
+
+    const insertFeatures = await db
+        .insertInto('feature')
+        .values(featureData)
+        .execute();
+
+    console.log(`Додано ${insertFeatures.length} функцій до таблиці feature`);
+
     return {
         insertBrands,
         insertModels,
         insertColors,
         insertFuelTypes,
         insertGearTypes,
-        insertCities
+        insertCities,
+        insertCarTypes,
+        insertBodyTypes,
+        insertFeatures
     }
 }

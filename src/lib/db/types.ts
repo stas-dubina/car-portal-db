@@ -15,7 +15,71 @@ export interface Database {
     account: AccountTable
     user: UserTable
     car: CarTable
+    body_type: BodyTypeTable
+    car_type: CarTypeTable
+    feature: FeatureTable
+    car_feature: CarFeatureTable
+    image: ImageTable
 }
+
+export interface CarTable {
+    car_id: Generated<number>
+    car_model_id: number
+    car_year: number
+    car_fuel_type_id: number
+    car_gear_type_id: number
+    car_mileage: number
+    car_price: number
+    car_user_id: number
+    car_status: 'ON_SALE' | 'SOLD' | 'CANCELLED'
+    car_color_id: number
+    car_created_at: Date
+    car_vin: string
+    car_description: string | null
+    car_body_type_id: number
+    car_accident: boolean
+    car_abroad: boolean
+    car_owner_number: number
+    car_in_credit: boolean
+    car_power: number
+    car_seat: number
+    car_drive_type: 'AWD' | 'RWD' | 'FWD'
+}
+
+export interface BodyTypeTable {
+    body_type_id: Generated<number>
+    body_type_name: string
+    body_car_type_id: number
+}
+
+export interface CarTypeTable {
+    car_type_id: Generated<number>
+    car_type_name: string
+}
+
+export interface FeatureTable {
+    feature_id: Generated<number>
+    feature_name: string
+}
+
+export interface CarFeatureTable {
+    car_id: number
+    feature_id: number
+}
+
+export interface ImageTable {
+    image_id: Generated<number>
+    image_file: Buffer
+    image_car_id: number
+}
+
+export interface OrderTable {
+    order_id: Generated<number>
+    order_car_id: number
+    order_price: number
+    order_created_at: Date
+}
+
 
 export interface BrandTable {
     brand_id: Generated<number>
@@ -65,20 +129,6 @@ export interface UserTable {
     user_email: string
 }
 
-export interface CarTable {
-    car_id: Generated<number>
-    car_model_id: number
-    car_year: number
-    car_fuel_type_id: number
-    car_gear_type_id: number
-    car_mileage: number
-    car_price: number
-    car_user_id: number
-    car_status: 'ON_SALE' | 'SOLD' | 'CANCELLED'
-    car_color_id: number
-    car_created_at: Date
-}
-
 // Типы для каждой таблицы
 export type Brand = Selectable<BrandTable>
 export type NewBrand = Insertable<BrandTable>
@@ -115,3 +165,24 @@ export type UpdateUser = Updateable<UserTable>
 export type Car = Selectable<CarTable>
 export type NewCar = Insertable<CarTable>
 export type UpdateCar = Updateable<CarTable>
+
+export type Image = Selectable<ImageTable>
+export type NewImage = Insertable<ImageTable>
+export type UpdateImage = Updateable<ImageTable>
+
+export type CarFeature = Selectable<CarFeatureTable>
+export type NewCarFeature = Insertable<CarFeatureTable>
+export type UpdateCarFeature = Updateable<CarFeatureTable>
+
+export type Feature = Selectable<FeatureTable>
+export type NewFeature = Insertable<FeatureTable>
+export type UpdateFeature = Updateable<FeatureTable>
+
+export type Order = Selectable<OrderTable>
+export type NewOrder = Insertable<OrderTable>
+export type UpdateOrder = Updateable<OrderTable>
+
+export type BodyType = Selectable<BodyTypeTable>
+export type NewBodyType = Insertable<BodyTypeTable>
+export type UpdateBodyType = Updateable<BodyTypeTable>
+
