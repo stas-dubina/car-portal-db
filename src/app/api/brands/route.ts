@@ -1,15 +1,12 @@
 import {NextResponse} from 'next/server';
-import {RangeParser} from '@/lib/range';
 import {getAll, getCount} from "@/app/api/brands/service";
+import {SearchParamsParser} from "@/lib/search_params";
 
 export async function GET(request: Request) {
-    const {searchParams} = request.nextUrl;
-    const ids = searchParams.getAll('id');
-    const rangeParam = searchParams.get('range');
-    const range = RangeParser(rangeParam)
+    const searchParams = SearchParamsParser(request);
 
-    const totalCount = await getCount(ids);
-    const brands = await getAll(ids, range);
+    const totalCount = await getCount(searchParams.ids);
+    const brands = await getAll(searchParams.ids, searchParams.range);
 
     return NextResponse.json(
         brands,
@@ -17,7 +14,7 @@ export async function GET(request: Request) {
             status: 200,
             headers: {
                 'Access-Control-Expose-Headers': 'Content-Range',
-                'Content-Range': `brands ${rangeParam}/${totalCount}`
+                'Content-Range': `brands ${searchParams.range?.start}-${searchParams.range?.end}/${totalCount}`
             }
         });
 }
