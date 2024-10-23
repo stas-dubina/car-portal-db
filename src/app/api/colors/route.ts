@@ -1,18 +1,18 @@
-import { NextResponse } from 'next/server';
-import { connect } from "@/lib/db/connection";
+import {NextResponse} from 'next/server';
+import {SearchParamsParser} from "@/lib/search_params";
+import {getAll, getCount} from "@/app/api/colors/service";
 
-export async function GET() {
-    const db = await connect();
+export async function GET(request: Request) {
+    const searchParams = SearchParamsParser(request);
 
-    const colors = await db
-        .selectFrom('color')
-        .selectAll()
-        .execute();
+    const totalCount = await getCount(searchParams.ids);
+    const models = await getAll(searchParams.ids, searchParams.range);
 
-    return NextResponse.json(colors, {
+    return NextResponse.json(models, {
         status: 200,
         headers: {
-            'X-Total-Count': `${colors.length}`
+            'Access-Control-Expose-Headers': 'Content-Range',
+            'Content-Range': `brands ${searchParams.range?.start}-${searchParams.range?.end}/${totalCount}`
         }
     });
 }

@@ -36,3 +36,15 @@ export async function getAll(ids:Array<number>, range?:Range) {
 
     return await query.orderBy('model_id asc').execute();
 }
+
+export async function getById(id: number) {
+    const db = await connect();
+    return await db.selectFrom('model')
+        .select([
+            'model_id as id',
+            'model_name as name',
+            'model_brand_id as brandId'
+        ])
+        .where('model_id', '=', id)
+        .executeTakeFirst();
+}

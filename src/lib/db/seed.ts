@@ -273,6 +273,144 @@ export async function seed() {
 
     console.log(`Додано ${insertFeatures.length} функцій до таблиці feature`);
 
+    // Дані для таблиці account
+    const accountData = [
+        {
+            user_login: 'user1',
+            user_password_hash: 'хеш_пароля_1',
+            user_created_at: new Date()
+        },
+        {
+            user_login: 'user2',
+            user_password_hash: 'хеш_пароля_2',
+            user_created_at: new Date()
+        },
+        {
+            user_login: 'user3',
+            user_password_hash: 'хеш_пароля_3',
+            user_created_at: new Date()
+        }
+    ];
+
+    const insertAccounts = await db
+        .insertInto('account')
+        .values(accountData)
+        .execute();
+
+    console.log(`Додано ${insertAccounts.length} акаунтів до таблиці account`);
+
+    // Дані для таблиці user
+    const userData = [
+        {
+            user_id: 1,
+            user_first_name: 'Іван',
+            user_last_name: 'Петренко',
+            user_phone: '+380991234567',
+            user_city_id: 1,
+            user_email: 'ivan@example.com'
+        },
+        {
+            user_id: 2,
+            user_first_name: 'Марія',
+            user_last_name: 'Коваленко',
+            user_phone: '+380992345678',
+            user_city_id: 2,
+            user_email: 'maria@example.com'
+        },
+        {
+            user_id: 3,
+            user_first_name: 'Олексій',
+            user_last_name: 'Сидоренко',
+            user_phone: '+380993456789',
+            user_city_id: 3,
+            user_email: 'oleksiy@example.com'
+        }
+    ];
+
+    const insertUsers = await db
+        .insertInto('user')
+        .values(userData)
+        .execute();
+
+    console.log(`Додано ${insertUsers.length} користувачів до таблиці user`);
+
+    // Данные для таблицы car
+    const carData = [
+        {
+            car_model_id: 1,
+            car_year: 2020,
+            car_fuel_type_id: 1,
+            car_gear_type_id: 1,
+            car_mileage: 50000,
+            car_price: 15000,
+            car_user_id: 1,
+            car_status: 'ON_SALE',
+            car_color_id: 1,
+            car_created_at: new Date(),
+            car_vin: 'ABC123456789',
+            car_description: 'Відмінний стан, один власник',
+            car_body_type_id: 1,
+            car_accident: false,
+            car_abroad: false,
+            car_owner_number: 1,
+            car_in_credit: false,
+            car_power: 150,
+            car_seat: 5,
+            car_drive_type: 'FWD'
+        },
+        {
+            car_model_id: 2,
+            car_year: 2019,
+            car_fuel_type_id: 2,
+            car_gear_type_id: 2,
+            car_mileage: 75000,
+            car_price: 12000,
+            car_user_id: 2,
+            car_status: 'ON_SALE',
+            car_color_id: 2,
+            car_created_at: new Date(),
+            car_vin: 'DEF987654321',
+            car_description: 'Гарний стан, регулярне обслуговування',
+            car_body_type_id: 2,
+            car_accident: true,
+            car_abroad: true,
+            car_owner_number: 2,
+            car_in_credit: false,
+            car_power: 120,
+            car_seat: 4,
+            car_drive_type: 'RWD'
+        },
+        {
+            car_model_id: 3,
+            car_year: 2021,
+            car_fuel_type_id: 3,
+            car_gear_type_id: 1,
+            car_mileage: 30000,
+            car_price: 20000,
+            car_user_id: 3,
+            car_status: 'ON_SALE',
+            car_color_id: 3,
+            car_created_at: new Date(),
+            car_vin: 'GHI246813579',
+            car_description: 'Як новий, повна комплектація',
+            car_body_type_id: 3,
+            car_accident: false,
+            car_abroad: false,
+            car_owner_number: 1,
+            car_in_credit: true,
+            car_power: 180,
+            car_seat: 7,
+            car_drive_type: 'AWD'
+        }
+    ];
+
+    const insertCars = await db
+        .insertInto('car')
+        .values(carData)
+        .execute();
+
+    console.log(`Додано ${insertCars.length} автомобілів до таблиці car`);
+    /*
     return {
         insertBrands,
         insertModels,
@@ -284,4 +422,10 @@ export async function seed() {
         insertBodyTypes,
         insertFeatures
     }
+        */
+       return {
+        insertCars,
+        insertAccounts,
+        insertUsers
+    };
 }
