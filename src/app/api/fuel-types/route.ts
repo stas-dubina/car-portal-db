@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {SearchParamsParser} from "@/lib/search_params";
+import {SearchParamsParser} from "@/lib/params/search_params";
 import {getAll, getCount} from "@/app/api/fuel-types/service";
 
 export async function GET(request: Request) {

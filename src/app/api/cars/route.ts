@@ -1,12 +1,14 @@
 import {NextResponse} from 'next/server';
-import {SearchParamsParser} from "@/lib/search_params";
+import {SearchParamsParser} from "@/lib/params/search_params";
 import {getAll, getCount} from "@/app/api/cars/service";
+import {CarSearchFilter} from "@/app/api/cars/car_search_filter";
 
 export async function GET(request: Request) {
     const searchParams = SearchParamsParser(request);
+    const filter = searchParams.filter as CarSearchFilter;
 
-    const totalCount = await getCount(searchParams.ids);
-    const models = await getAll(searchParams.ids, searchParams.range);
+    const totalCount = await getCount(searchParams.ids, filter);
+    const models = await getAll(searchParams.ids, filter, searchParams.range);
 
     return NextResponse.json(models, {
         status: 200,

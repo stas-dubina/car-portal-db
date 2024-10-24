@@ -5,6 +5,9 @@ import {
     Updateable,
 } from 'kysely'
 
+export type CarDriveType = 'AWD' | 'RWD' | 'FWD'
+export type CarStatus = 'ON_SALE' | 'SOLD' | 'CANCELLED'
+
 export interface Database {
     brand: BrandTable
     model: ModelTable
@@ -31,7 +34,7 @@ export interface CarTable {
     car_mileage: number
     car_price: number
     car_user_id: number
-    car_status: 'ON_SALE' | 'SOLD' | 'CANCELLED'
+    car_status: CarStatus
     car_color_id: number
     car_created_at: Date
     car_vin: string
@@ -43,7 +46,7 @@ export interface CarTable {
     car_in_credit: boolean
     car_power: number
     car_seat: number
-    car_drive_type: 'AWD' | 'RWD' | 'FWD'
+    car_drive_type: CarDriveType
 }
 
 export interface BodyTypeTable {

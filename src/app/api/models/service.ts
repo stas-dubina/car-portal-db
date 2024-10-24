@@ -1,7 +1,7 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
 
-export async function getCount(ids:Array<number>) {
+export async function getCount(ids:Array<number>, searchName?:string) {
     const db = await connect();
 
     let query = db.selectFrom('model')
@@ -12,11 +12,15 @@ export async function getCount(ids:Array<number>) {
     if (ids.length > 0) {
         query = query.where('model_id', 'in', ids.map(Number));
     }
+
+    if (searchName) {
+        query = query.where('model_name', 'like', `%${searchName}%`)
+    }
     const result = await query.executeTakeFirstOrThrow();
     return result.model_count;
 }
 
-export async function getAll(ids:Array<number>, range?:Range) {
+export async function getAll(ids:Array<number>, range?:Range, searchName?:string) {
     const db = await connect();
     let query = db.selectFrom('model')
         .select([
@@ -27,6 +31,10 @@ export async function getAll(ids:Array<number>, range?:Range) {
 
     if (ids.length > 0) {
         query = query.where('model_id', 'in', ids.map(Number));
+    }
+
+    if (searchName) {
+        query = query.where('model_name', 'like', `%${searchName}%`)
     }
 
     if (range) {

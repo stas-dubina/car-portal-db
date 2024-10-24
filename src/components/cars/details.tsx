@@ -27,84 +27,43 @@ export const CarShow = () => {
         <RecordContextProvider value={data}>
             <Show>
                 <SimpleShowLayout>
-                    <Labeled label="ID">
-                        <TextField source="id"/>
-                    </Labeled>
-                    <Labeled label="Модель">
-                        <ReferenceField source="modelId" reference="models"/>
-                    </Labeled>
-                    <Labeled label="Рiк">
-                        <TextField source="year"/>
-                    </Labeled>
-                    <Labeled label="Тип палива">
-                        <ReferenceField source="fuelTypeId" reference="fuel-types"/>
-                    </Labeled>
-                    <Labeled label="Тип коробки передач">
-                        <ReferenceField source="gearTypeId" reference="gear-types"/>
-                    </Labeled>
-                    <Labeled label="Пробіг">
-                        <NumberField source="mileage"/>
-                    </Labeled>
-                    <Labeled label="Ціна">
-                        <NumberField source="price" options={{
-                            style: 'currency',
-                            currency: 'USD'
-                        }}/>
-                    </Labeled>
-                    <Labeled label="Власник">
-                        <ReferenceField source="userId" reference="users">
-                            <FunctionField
-                                render={record => `${record.firstName} ${record.lastName}`}
-                            />
-                        </ReferenceField>
-                    </Labeled>
-                    <Labeled label="Статус">
-                        <SelectField source="status" choices={[
-                            {id: 'ON_SALE', name: 'ON_SALE'},
-                            {id: 'SOLD', name: 'SOLD'},
-                            {id: 'CANCELLED', name: 'CANCELLED'},
-                        ]}/>
-                    </Labeled>
-                    <Labeled label="Колір">
-                        <ReferenceField source="colorId" reference="colors"/>
-                    </Labeled>
-                    <Labeled label="Дата створення">
-                        <DateField source="createdAt"/>
-                    </Labeled>
-                    <Labeled label="VIN-код">
-                        <TextField source="vin"/>
-                    </Labeled>
-                    <Labeled label="Тип кузова">
-                        <ReferenceField source="bodyTypeId" reference="body-types"/>
-                    </Labeled>
-                    <Labeled label="Був у ДТП">
-                        <BooleanField source="accident"/>
-                    </Labeled>
-                    <Labeled label="Був за кордоном">
-                        <BooleanField source="abroad"/>
-                    </Labeled>
-                    <Labeled label="Кількість власників">
-                        <NumberField source="ownerNumber"/>
-                    </Labeled>
-                    <Labeled label="В кредиті">
-                        <BooleanField source="inCredit"/>
-                    </Labeled>
-                    <Labeled label="Потужність">
-                        <NumberField source="power"/>
-                    </Labeled>
-                    <Labeled label="Кількість місць">
-                        <NumberField source="seat"/>
-                    </Labeled>
-                    <Labeled label="Тип приводу">
-                        <SelectField source="driveType" choices={[
-                            {id: 'AWD', name: 'AWD'},
-                            {id: 'RWD', name: 'RWD'},
-                            {id: 'FWD', name: 'FWD'},
-                        ]}/>
-                    </Labeled>
-                    <Labeled label="Опис">
-                        <TextField source="description"/>
-                    </Labeled>
+                <TextField source="id" label="ID" />
+            <TextField source="brandName" label="Марка" />
+            <TextField source="modelName" label="Модель" />
+            <TextField source="year" label="Рік" />
+            <TextField source="fuelTypeName" label="Тип палива" />
+            <TextField source="gearTypeName" label="Коробка передач" />
+            <NumberField source="mileage" label="Пробіг" />
+            <NumberField source="price" label="Ціна" options={{
+                style: 'currency',
+                currency: 'USD'
+            }}/>
+            <TextField source="firstName" label="Ім'я власника" />
+            <TextField source="lastName" label="Прізвище власника" />
+            <TextField source="phone" label="Телефон" />
+            <TextField source="email" label="Email" />
+            <SelectField source="status" choices={[
+                {id: 'ON_SALE', name: 'ON_SALE'},
+                {id: 'SOLD', name: 'SOLD'},
+                {id: 'CANCELLED', name: 'CANCELLED'},
+            ]} label="Статус"/>
+            <TextField source="colorName" label="Колір" />
+            <DateField source="createdAt" label="Дата створення" />
+            <TextField source="vin" label="VIN-код" />
+            <TextField source="description" label="Опис" />
+            <TextField source="bodyTypeName" label="Тип кузова" />
+            <TextField source="carTypeName" label="Тип автомобіля" />
+            <BooleanField source="accident" label="Був у ДТП" />
+            <BooleanField source="abroad" label="Був за кордоном" />
+            <NumberField source="ownerNumber" label="Кількість власників" />
+            <BooleanField source="inCredit" label="В кредиті" />
+            <NumberField source="power" label="Потужність" />
+            <NumberField source="seat" label="Кількість місць" />
+            <SelectField source="driveType" choices={[
+                {id: 'AWD', name: 'AWD'},
+                {id: 'RWD', name: 'RWD'},
+                {id: 'FWD', name: 'FWD'},
+            ]} label="Тип приводу" />
                 </SimpleShowLayout>
             </Show>
         </RecordContextProvider>
