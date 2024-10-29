@@ -1,25 +1,15 @@
 import {NextResponse} from 'next/server';
+import brandRepository from "@/app/api/brands/repository";
 import {connect} from "@/lib/db/connection";
 
 type Params = {
     id: Number
 }
 
-async function getBrandById(id: number) {
-    const db = await connect();
-    return await db.selectFrom('brand')
-        .select([
-            'brand_id as id',
-            'brand_name as name'
-        ])
-        .where('brand_id', '=', id)
-        .executeTakeFirst();
-}
-
 export async function GET(request: Request, context: { params: Params }) {
-    const id = context.params.id;
+    const id = Number(context.params.id);
 
-    const brand = await getBrandById(id);
+    const brand = await brandRepository.findById(id);
 
     if (!brand) {
         return NextResponse.json({error: 'Бренд не найден'}, {status: 404});
@@ -31,7 +21,7 @@ export async function GET(request: Request, context: { params: Params }) {
 
 export async function PUT(request: Request, context: { params: Params }) {
     const updateBrand = await request.json();
-    const id = context.params.id;
+    const id = Number(context.params.id);
 
     const db = await connect();
 
@@ -47,7 +37,7 @@ export async function PUT(request: Request, context: { params: Params }) {
         return NextResponse.json({error: 'Бренд не найден'}, {status: 404});
     }
 
-    const brand = await getBrandById(id);
+    const brand = await brandRepository.findById(id);
     return NextResponse.json(brand, {status: 200});
 
 }

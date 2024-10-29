@@ -1,7 +1,8 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
+import {Model} from "@/lib/db/types";
 
-export async function getCount(ids:Array<number>, searchName?:string) {
+export async function getCount(ids: Array<number>, searchName?: string) {
     const db = await connect();
 
     let query = db.selectFrom('model')
@@ -20,13 +21,13 @@ export async function getCount(ids:Array<number>, searchName?:string) {
     return result.model_count;
 }
 
-export async function getAll(ids:Array<number>, range?:Range, searchName?:string) {
+export async function getAll(ids: Array<number>, range?: Range, searchName?: string): Promise<Model[]> {
     const db = await connect();
     let query = db.selectFrom('model')
         .select([
-            'model_id as id',
-            'model_name as name',
-            'model_brand_id as brandId'
+            'model_id',
+            'model_name',
+            'model_brand_id'
         ]);
 
     if (ids.length > 0) {
@@ -45,13 +46,13 @@ export async function getAll(ids:Array<number>, range?:Range, searchName?:string
     return await query.orderBy('model_id asc').execute();
 }
 
-export async function getById(id: number) {
+export async function getById(id: number): Promise<Model | undefined> {
     const db = await connect();
     return await db.selectFrom('model')
         .select([
-            'model_id as id',
-            'model_name as name',
-            'model_brand_id as brandId'
+            'model_id',
+            'model_name',
+            'model_brand_id'
         ])
         .where('model_id', '=', id)
         .executeTakeFirst();

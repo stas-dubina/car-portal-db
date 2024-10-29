@@ -1,5 +1,6 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from '@/lib/range';
+import {Brand} from "@/lib/db/types";
 
 export async function getCount(ids:Array<number>, searchName?:string) {
     const db = await connect();
@@ -20,12 +21,12 @@ export async function getCount(ids:Array<number>, searchName?:string) {
     return result.brand_count;
 }
 
-export async function getAll(ids:Array<number>, range?:Range, searchName?:string) {
+export async function getAll(ids:Array<number>, range?:Range, searchName?:string):Promise<Brand[]> {
     const db = await connect();
     let query = db.selectFrom('brand')
         .select([
-            'brand_id as id',
-            'brand_name as name'
+            'brand_id',
+            'brand_name'
         ]);
 
     if (ids.length > 0) {
@@ -40,4 +41,15 @@ export async function getAll(ids:Array<number>, range?:Range, searchName?:string
     }
 
     return await query.orderBy('brand_id asc').execute();
+}
+
+export async function getBrandById(id: number) {
+    const db = await connect();
+    return await db.selectFrom('brand')
+        .select([
+            'brand_id',
+            'brand_name'
+        ])
+        .where('brand_id', '=', id)
+        .executeTakeFirst();
 }
