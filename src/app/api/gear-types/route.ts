@@ -1,6 +1,6 @@
 import {NextResponse} from 'next/server';
 import {SearchParamsParser} from "@/lib/params/search_params";
-import {getAll, getCount} from "@/app/api/gear-types/service";
+import {getAll, getCount} from "@/app/api/gear-types/db_repository";
 
 export async function GET(request: Request) {
     const searchParams = SearchParamsParser(request);
