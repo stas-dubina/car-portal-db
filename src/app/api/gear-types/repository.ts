@@ -30,11 +30,11 @@ class GearRepository implements Repository<GearTypeDto> {
 
     async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<GearTypeDto>> {
         const totalCount = await getCount(ids, filter?.name);
-        const fuelTypes = await getAll(ids, range, filter?.name);
+        const gearTypes = await getAll(ids, range, filter?.name);
 
         return {
             total: totalCount,
-            list: fuelTypes.map(g => mapToDto(g))
+            list: gearTypes.map(g => mapToDto(g))
         }
     }
 }
