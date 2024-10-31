@@ -2,7 +2,7 @@ import {connect} from "@/lib/db/connection";
 import {Range} from '@/lib/range';
 import {Brand} from "@/lib/db/types";
 
-export async function getCount(ids:Array<number>, searchName?:string) {
+export async function getCount(ids: Array<number>, filter?:Partial<Brand>): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('brand')
@@ -13,15 +13,14 @@ export async function getCount(ids:Array<number>, searchName?:string) {
     if (ids.length > 0) {
         query = query.where('brand_id', 'in', ids.map(Number));
     }
-    if (searchName) {
-        console.log(searchName)
-        query = query.where('brand_name', 'like', `%${searchName}%`);
+    if (filter?.brand_name) {
+        query = query.where('brand_name', 'like', `%${filter?.brand_name}%`);
     }
     const result = await query.executeTakeFirstOrThrow();
     return result.brand_count;
 }
 
-export async function getAll(ids:Array<number>, range?:Range, searchName?:string):Promise<Brand[]> {
+export async function getAll(ids: Array<number>, range?: Range, filter?:Partial<Brand>): Promise<Brand[]> {
     const db = await connect();
     let query = db.selectFrom('brand')
         .select([
@@ -32,8 +31,8 @@ export async function getAll(ids:Array<number>, range?:Range, searchName?:string
     if (ids.length > 0) {
         query = query.where('brand_id', 'in', ids.map(Number));
     }
-    if (searchName) {
-        query = query.where('brand_name', 'like', `%${searchName}%`);
+    if (filter?.brand_name) {
+        query = query.where('brand_name', 'like', `%${filter?.brand_name}%`);
     }
     if (range) {
         const rowCount = range.end - range.start + 1;
@@ -43,7 +42,7 @@ export async function getAll(ids:Array<number>, range?:Range, searchName?:string
     return await query.orderBy('brand_id asc').execute();
 }
 
-export async function getBrandById(id: number) {
+export async function getById(id: number): Promise<Brand | undefined> {
     const db = await connect();
     return await db.selectFrom('brand')
         .select([
@@ -52,4 +51,10 @@ export async function getBrandById(id: number) {
         ])
         .where('brand_id', '=', id)
         .executeTakeFirst();
+}
+
+export default {
+    getById,
+    getCount,
+    getAll
 }

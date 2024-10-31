@@ -1,42 +1,48 @@
-import {BodyType} from "@/lib/db/types";
-import {ListResult, Repository} from "@/lib/repository";
-import {getCount, getAll, getById} from "@/app/api/body-types/db_repository";
-import {Range} from "@/lib/range";
-import {SimpleSearchFilter} from "@/lib/params/simple_search_filter";
+import {BodyTypeView} from "@/lib/db/types";
+import CrudRepository, {Mapper} from "@/lib/crud_repository";
+import dbRepository from "@/app/api/body-types/db_repository";
 
-export type BodyTypeDto = {
+export type CarTypeDto = {
     id: number;
     name: string;
 }
 
-function mapToDto(b: BodyType): BodyTypeDto {
-    return {
-        id: b.body_type_id,
-        name: b.body_type_name
-    }
+export type BodyTypeDto = {
+    id: number;
+    name: string;
+    carType: CarTypeDto;
 }
 
-class BodyRepository implements Repository<BodyTypeDto> {
-
-    async findById(id: number): Promise<BodyTypeDto | undefined> {
-        const bodyType = await getById(id);
-
-        if (!bodyType) {
-            return undefined;
-        }
-
-        return mapToDto(bodyType);
-    }
-
-    async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<BodyTypeDto>> {
-        const totalCount = await getCount(ids, filter?.name);
-        const bodyType = await getAll(ids, range, filter?.name);
-
+class BodyTypeMapper implements Mapper<BodyTypeView, BodyTypeDto> {
+    toDto(e: BodyTypeView): BodyTypeDto {
         return {
-            total: totalCount,
-            list: bodyType.map(b => mapToDto(b))
+            id: e.body_type_id,
+            name: e.body_type_name,
+            carType: {
+                id: e.car_type_id,
+                name: e.car_type_name
+            },
         }
     }
+
+    toEntity(t: BodyTypeDto): BodyTypeView {
+        return {
+            body_type_id: t.id,
+            body_type_name: t.name,
+            car_type_id: t.carType.id,
+            car_type_name: t.carType.name
+        }
+    }
+
+    toEntityPartial(t: Partial<BodyTypeDto>): Partial<BodyTypeView> {
+        return {
+            body_type_id: t.id,
+            body_type_name: t.name,
+            car_type_id: t.carType?.id,
+            car_type_name: t.carType?.name
+        }
+    }
+
 }
 
-export default new BodyRepository();
+export default new CrudRepository<BodyTypeView, BodyTypeDto>(dbRepository, new BodyTypeMapper());

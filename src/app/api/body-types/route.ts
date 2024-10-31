@@ -1,18 +1,17 @@
 import {NextResponse} from 'next/server';
 import {SearchParamsParser} from "@/lib/params/search_params";
-import {getAll, getCount} from "@/app/api/body-types/db_repository";
+import bodyTypeRepository from "@/app/api/body-types/repository";
 
 export async function GET(request: Request) {
     const searchParams = SearchParamsParser(request);
 
-    const totalCount = await getCount(searchParams.ids);
-    const models = await getAll(searchParams.ids, searchParams.range);
+    const bodyTypes = await bodyTypeRepository.findAll(searchParams.ids, searchParams.range, searchParams.filter);
 
-    return NextResponse.json(models, {
+    return NextResponse.json(bodyTypes.list, {
         status: 200,
         headers: {
             'Access-Control-Expose-Headers': 'Content-Range',
-            'Content-Range': `brands ${searchParams.range?.start}-${searchParams.range?.end}/${totalCount}`
+            'Content-Range': `body-types ${searchParams.range?.start}-${searchParams.range?.end}/${bodyTypes.total}`
         }
     });
 }

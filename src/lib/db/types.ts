@@ -60,6 +60,13 @@ export interface CarTypeTable {
     car_type_name: string
 }
 
+export interface BodyTypeView {
+    body_type_id: number
+    body_type_name: string
+    car_type_id: number
+    car_type_name: string
+}
+
 export interface FeatureTable {
     feature_id: Generated<number>
     feature_name: string

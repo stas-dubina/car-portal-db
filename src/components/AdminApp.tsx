@@ -9,6 +9,7 @@ import {CarList} from "@/components/cars/list";
 import {CarShow} from "@/components/cars/details";
 import {BrandList} from "@/components/brands/list";
 import {ModelList} from "@/components/models/list";
+import {BodyTypeList} from "@/components/body-types/list";
 
 const dataProvider = simpleRestProvider("http://localhost:3000/api");
 
@@ -23,6 +24,12 @@ const AdminApp = () => (
         <Resource
             name="models"
             list={ModelList}
+            show={ShowGuesser}
+            icon={LibraryBooksIcon}
+        />
+        <Resource
+            name="body-types"
+            list={BodyTypeList}
             show={ShowGuesser}
             icon={LibraryBooksIcon}
         />
