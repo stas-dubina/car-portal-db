@@ -1,42 +1,33 @@
 import {GearType} from "@/lib/db/types";
-import {ListResult, Repository} from "@/lib/repository";
-import {getAll, getCount, getById} from "@/app/api/gear-types/db_repository";
-import {SimpleSearchFilter} from "@/lib/params/simple_search_filter";
-import {Range} from "@/lib/range";
+import dbRepository from "@/app/api/gear-types/db_repository";
+import crudRepository, {Mapper} from "@/lib/crud_repository";
 
 export type GearTypeDto = {
     id: number;
     name: string;
 }
 
-function mapToDto(g: GearType): GearTypeDto {
-    return {
-        id: g.gear_type_id,
-        name: g.gear_type_name,
-    }
-}
-
-class GearRepository implements Repository<GearTypeDto> {
-
-    async findById(id: number): Promise<GearTypeDto | undefined> {
-        const gearType = await getById(id);
-
-        if (!gearType) {
-            return undefined;
-        }
-
-        return mapToDto(gearType);
-    }
-
-    async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<GearTypeDto>> {
-        const totalCount = await getCount(ids, filter?.name);
-        const gearTypes = await getAll(ids, range, filter?.name);
-
+class GearMapper implements Mapper<GearType, GearTypeDto> {
+    toDto(e: GearType): GearTypeDto {
         return {
-            total: totalCount,
-            list: gearTypes.map(g => mapToDto(g))
+            id: e.gear_type_id,
+            name: e.gear_type_name
+        }
+    }
+
+    toEntity(t: GearTypeDto): GearType {
+        return {
+            gear_type_id: t.id,
+            gear_type_name: t.name
+        }
+    }
+
+    toEntityPartial(t: Partial<GearTypeDto>): Partial<GearType> {
+        return {
+            gear_type_id: t.id,
+            gear_type_name: t.name
         }
     }
 }
 
-export default new GearRepository();
+export default new crudRepository<GearType, GearTypeDto>(dbRepository, new GearMapper());

@@ -1,42 +1,34 @@
 import {FuelType} from "@/lib/db/types";
-import {ListResult, Repository} from "@/lib/repository";
-import {getAll, getById, getCount} from "@/app/api/fuel-types/db_repository";
-import {SimpleSearchFilter} from "@/lib/params/simple_search_filter";
-import {Range} from "@/lib/range";
+import CrudRepository, {Mapper} from "@/lib/crud_repository";
+import dbRepository from "@/app/api/fuel-types/db_repository";
 
 export type FuelTypeDto = {
     id: number;
     name: string;
 }
 
-function mapToDto(f: FuelType): FuelTypeDto {
-    return {
-        id: f.fuel_type_id,
-        name: f.fuel_type_name,
-    }
-}
+class FuelMapper implements Mapper<FuelType, FuelTypeDto> {
 
-class FuelRepository implements Repository<FuelTypeDto> {
-
-    async findById(id: number): Promise<FuelTypeDto | undefined> {
-        const fuelType = await getById(id);
-
-        if (!fuelType) {
-            return undefined;
-        }
-
-        return mapToDto(fuelType);
-    }
-
-    async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<FuelTypeDto>> {
-        const totalCount = await getCount(ids, filter?.name);
-        const fuelTypes = await getAll(ids, range, filter?.name);
-
+    toDto(e: FuelType): FuelTypeDto {
         return {
-            total: totalCount,
-            list: fuelTypes.map(f => mapToDto(f))
+            id: e.fuel_type_id,
+            name: e.fuel_type_name
+        }
+    }
+
+    toEntity(t: FuelTypeDto): FuelType {
+        return {
+            fuel_type_id: t.id,
+            fuel_type_name: t.name
+        }
+    }
+
+    toEntityPartial(t: Partial<FuelTypeDto>): Partial<FuelType> {
+        return {
+            fuel_type_id: t.id,
+            fuel_type_name: t.name,
         }
     }
 }
 
-export default new FuelRepository();
+export default new CrudRepository<FuelType, FuelTypeDto>(dbRepository, new FuelMapper());

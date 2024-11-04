@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {getById} from "@/app/api/cars/service";
+import {getById} from "@/app/api/cars/db_repository";
 
 type Params = {
     id: Number

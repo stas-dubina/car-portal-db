@@ -90,7 +90,6 @@ export interface OrderTable {
     order_created_at: Date
 }
 
-
 export interface BrandTable {
     brand_id: Generated<number>
     brand_name: string
@@ -121,6 +120,42 @@ export interface CityTable {
 export interface GearTypeTable {
     gear_type_id: Generated<number>
     gear_type_name: string
+}
+
+export interface CarView {
+    car_id: number;
+    car_brand_id: number;
+    car_brand_name: string;
+    car_model_id: number;
+    car_model_name: string;
+    car_year: number;
+    car_fuel_type_id: number;
+    car_fuel_type_name: string;
+    car_gear_type_id: number;
+    car_gear_type_name: string;
+    car_mileage: number;
+    car_price: number;
+    car_user_id: number;
+    car_user_first_name: string;
+    car_user_last_name: string;
+    car_user_phone: string;
+    car_user_email: string;
+    car_status: CarStatus;
+    car_color_id: number;
+    car_color_name: string;
+    car_color_value: string;
+    car_created_at: Date;
+    car_vin: string;
+    car_description: string | null;
+    car_body_type_id: number;
+    car_body_type_name: string;
+    car_accident: boolean;
+    car_abroad: boolean;
+    car_owner_number: number;
+    car_in_credit: boolean;
+    car_power: number;
+    car_seat: number;
+    car_drive_type: CarDriveType;
 }
 
 export interface AccountTable {

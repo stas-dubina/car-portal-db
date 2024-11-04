@@ -1,25 +1,14 @@
 import {NextResponse} from 'next/server';
 import brandRepository from "@/app/api/brands/repository";
 import {connect} from "@/lib/db/connection";
+import {crudController} from "../controller";
+import {PathParams} from "@/lib/crud_controller";
 
-type Params = {
-    id: Number
+export async function GET(request: Request, context: { params: PathParams }) {
+    return crudController.getOne(request, context)
 }
 
-export async function GET(request: Request, context: { params: Params }) {
-    const id = Number(context.params.id);
-
-    const brand = await brandRepository.findById(id);
-
-    if (!brand) {
-        return NextResponse.json({error: 'Бренд не найден'}, {status: 404});
-    }
-
-    return NextResponse.json(brand, {status: 200});
-
-}
-
-export async function PUT(request: Request, context: { params: Params }) {
+export async function PUT(request: Request, context: { params: PathParams }) {
     const updateBrand = await request.json();
     const id = Number(context.params.id);
 

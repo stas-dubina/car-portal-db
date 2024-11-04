@@ -2,7 +2,7 @@ import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
 import {FuelType} from "@/lib/db/types";
 
-export async function getCount(ids:Array<number>, searchName?: string) {
+export async function getCount(ids:Array<number>, filter?:Partial<FuelType>): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('fuel_type')
@@ -14,14 +14,14 @@ export async function getCount(ids:Array<number>, searchName?: string) {
         query = query.where('fuel_type_id', 'in', ids.map(Number));
     }
 
-    if (searchName) {
-        query = query.where('fuel_type_name', 'like', `%${searchName}%`)
+    if (filter?.fuel_type_name) {
+        query = query.where('fuel_type_name', 'like', `%${filter?.fuel_type_name}%`)
     }
     const result = await query.executeTakeFirstOrThrow();
     return result.fuel_type_count;
 }
 
-export async function getAll(ids:Array<number>, range?:Range, searchName?: string): Promise<FuelType[]> {
+export async function getAll(ids:Array<number>, range?:Range, filter?:Partial<FuelType>): Promise<FuelType[]> {
     const db = await connect();
     let query = db.selectFrom('fuel_type')
         .select([
@@ -38,8 +38,8 @@ export async function getAll(ids:Array<number>, range?:Range, searchName?: strin
         query = query.limit(rowCount).offset(range.start)
     }
 
-    if (searchName) {
-        query = query.where('fuel_type_name', 'like', `%${searchName}%`)
+    if (filter?.fuel_type_name) {
+        query = query.where('fuel_type_name', 'like', `%${filter?.fuel_type_name}%`)
     }
 
     return await query.orderBy('fuel_type_id asc').execute();
@@ -54,4 +54,10 @@ export async function getById(id:number): Promise<FuelType | undefined> {
         ])
         .where('fuel_type_id', '=', id)
         .executeTakeFirst()
+}
+
+export default {
+    getById,
+    getCount,
+    getAll
 }

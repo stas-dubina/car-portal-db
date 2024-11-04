@@ -7,6 +7,7 @@ export type SearchParams = {
 }
 
 export function SearchParamsParser(request: Request): SearchParams {
+    // @ts-ignore
     const {searchParams} = request.nextUrl;
     const ids = searchParams.getAll('id');
     const rangeParam = searchParams.get('range');

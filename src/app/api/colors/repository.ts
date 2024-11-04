@@ -1,8 +1,6 @@
+import dbRepository from "./db_repository"
 import {Color} from "@/lib/db/types";
-import {ListResult, Repository} from "@/lib/repository";
-import {getAll, getCount, getById} from "@/app/api/colors/db_repository";
-import {SimpleSearchFilter} from "@/lib/params/simple_search_filter";
-import {Range} from "@/lib/range";
+import CrudRepository, {Mapper} from "@/lib/crud_repository";
 
 export type ColorDto = {
     id: number;
@@ -10,35 +8,30 @@ export type ColorDto = {
     value: string;
 }
 
-function mapToDto(c: Color): ColorDto {
-    return {
-        id: c.color_id,
-        name: c.color_name,
-        value: c.color_value,
-    }
-}
-
-class ColorRepository implements Repository<ColorDto> {
-
-    async findById(id: number): Promise<ColorDto | undefined> {
-        const color = await getById(id);
-
-        if (!color) {
-            return undefined;
-        }
-
-        return mapToDto(color);
-    }
-
-    async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<ColorDto>> {
-        const totalCount = await getCount(ids, filter?.name);
-        const colors = await getAll(ids, range, filter?.name);
-
+class ColorMapper implements Mapper<Color, ColorDto> {
+    toDto(e: Color): ColorDto {
         return {
-            total: totalCount,
-            list: colors.map(c => mapToDto(c))
+            id: e.color_id,
+            name: e.color_name,
+            value: e.color_value
+        }
+    }
+
+    toEntity(t: ColorDto): Color {
+        return {
+            color_id: t.id,
+            color_name: t.name,
+            color_value: t.value
+        }
+    }
+
+    toEntityPartial(t: Partial<ColorDto>): Partial<Color> {
+        return {
+            color_id: t.id,
+            color_name: t.name,
+            color_value: t.value
         }
     }
 }
 
-export default new ColorRepository();
+export default new CrudRepository<Color, ColorDto>(dbRepository, new ColorMapper());

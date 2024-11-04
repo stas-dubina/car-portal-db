@@ -2,7 +2,7 @@ import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
 import {Color} from "@/lib/db/types";
 
-export async function getCount(ids:Array<number>, searchName?: string) {
+export async function getCount(ids:Array<number>, filter?:Partial<Color>): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('color')
@@ -14,15 +14,15 @@ export async function getCount(ids:Array<number>, searchName?: string) {
         query = query.where('color_id', 'in', ids.map(Number));
     }
 
-    if (searchName) {
-        query = query.where('color_name', 'like', `%${searchName}%`)
-        query = query.where('color_value', 'like', `%${searchName}%`)
+    if (filter?.color_name) {
+        query = query.where('color_name', 'like', `%${filter?.color_name}%`)
+        query = query.where('color_value', 'like', `%${filter?.color_value}%`)
     }
     const result = await query.executeTakeFirstOrThrow();
     return result.color_count;
 }
 
-export async function getAll(ids:Array<number>, range?:Range, searchName?: string): Promise<Color[]> {
+export async function getAll(ids:Array<number>, range?:Range, filter?:Partial<Color>): Promise<Color[]> {
     const db = await connect();
     let query = db.selectFrom('color')
         .select([
@@ -40,9 +40,9 @@ export async function getAll(ids:Array<number>, range?:Range, searchName?: strin
         query = query.limit(rowCount).offset(range.start)
     }
 
-    if (searchName) {
-        query = query.where('color_name', 'like', `%${searchName}%`)
-        query = query.where('color_value', 'like', `%${searchName}%`)
+    if (filter?.color_name) {
+        query = query.where('color_name', 'like', `%${filter?.color_name}%`)
+        query = query.where('color_value', 'like', `%${filter?.color_value}%`)
     }
 
     return await query.orderBy('color_id asc').execute();
@@ -58,4 +58,10 @@ export async function getById(id:number): Promise<Color | undefined> {
         ])
         .where('color_id', '=', id)
         .executeTakeFirst()
+}
+
+export default {
+    getById,
+    getCount,
+    getAll
 }

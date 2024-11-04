@@ -3,8 +3,7 @@ import {Range} from "@/lib/range";
 import {CarSearchFilter} from "@/app/api/cars/car_search_filter";
 import {CarDriveType, CarStatus} from "@/lib/db/types";
 
-
-export async function getCount(ids: Array<number>, filter:CarSearchFilter) {
+export async function getCount(ids: Array<number>, filter:CarSearchFilter): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('car')
@@ -171,4 +170,10 @@ export async function getById(id: number) {
         ])
         .where('car_id', '=', id)
         .executeTakeFirst();
+}
+
+export default {
+    getById,
+    getCount,
+    getAll
 }
