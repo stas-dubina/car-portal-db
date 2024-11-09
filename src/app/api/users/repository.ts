@@ -1,50 +1,61 @@
-import {User} from "@/lib/db/types";
-import {ListResult, Repository} from "@/lib/repository";
-import {getAll, getCount, getById} from "@/app/api/users/db_repository";
-import {SimpleSearchFilter} from "@/lib/params/simple_search_filter";
-import {Range} from "@/lib/range";
+import {UserView} from "@/lib/db/types";
+import CrudRepository, {Mapper} from "@/lib/crud_repository";
+import dbRepository from "./db_repository";
 
 export type UserDto = {
     id: number;
+    createdAt: Date;
+    login: string;
     firstName: string;
     lastName: string;
     phone: string;
-    cityId: number;
     email: string;
+    cityId: number;
+    cityName: string;
 }
 
-function mapToDto(u: User): UserDto {
-    return {
-        id: u.user_id,
-        firstName: u.user_first_name,
-        lastName: u.user_last_name,
-        phone: u.user_phone,
-        cityId: u.user_city_id,
-        email: u.user_email,
-    }
-}
+class UserMapper implements Mapper<UserView, UserDto> {
 
-class UserRepository implements Repository<UserDto> {
-
-    async findById(id: number): Promise<UserDto | undefined> {
-        const user = await getById(id);
-
-        if (!user) {
-            return undefined;
-        }
-
-        return mapToDto(user);
-    }
-
-    async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<UserDto>> {
-        const totalCount = await getCount(ids, filter?.name);
-        const users = await getAll(ids, range, filter?.name);
-
+    toDto(e: UserView): UserDto {
         return {
-            total: totalCount,
-            list: users.map(u => mapToDto(u))
+            id: e.user_id,
+            createdAt: e.user_created_at,
+            login: e.user_login,
+            firstName: e.user_first_name,
+            lastName: e.user_last_name,
+            phone: e.user_phone,
+            email: e.user_email,
+            cityId: e.user_city_id,
+            cityName: e.user_city_name
         }
+    }
+
+    toEntity(t: UserDto): UserView {
+        return {
+            user_id: t.id,
+            user_created_at: t.createdAt,
+            user_login: t.login,
+            user_first_name: t.firstName,
+            user_last_name: t.lastName,
+            user_phone: t.phone,
+            user_email: t.email,
+            user_city_id: t.cityId,
+            user_city_name: t.cityName
+        }
+    }
+
+    toEntityPartial(t: Partial<UserDto>): Partial<UserView> {
+        return {
+            user_id: t.id,
+            user_created_at: t.createdAt,
+            user_login: t.login,
+            user_first_name: t.firstName,
+            user_last_name: t.lastName,
+            user_phone: t.phone,
+            user_email: t.email,
+            user_city_id: t.cityId,
+            user_city_name: t.cityName        }
     }
 }
 
-export default new UserRepository();
+export default new CrudRepository<UserView, UserDto>(dbRepository, new UserMapper());

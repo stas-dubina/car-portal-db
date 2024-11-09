@@ -174,6 +174,18 @@ export interface UserTable {
     user_email: string
 }
 
+export interface UserView {
+    user_id: number
+    user_created_at: Date
+    user_login: string
+    user_first_name: string
+    user_last_name: string
+    user_phone: string
+    user_email: string
+    user_city_id: number
+    user_city_name: string
+}
+
 // Типы для каждой таблицы
 export type Brand = Selectable<BrandTable>
 export type NewBrand = Insertable<BrandTable>

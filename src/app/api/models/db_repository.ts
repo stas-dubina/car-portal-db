@@ -1,42 +1,44 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
-import {Model} from "@/lib/db/types";
+import {Database, Model} from "@/lib/db/types";
+import {Expression, expressionBuilder, SqlBool} from "kysely";
 
-export async function getCount(ids: Array<number>, searchName?: string) {
+function withFilter(ids: Array<number>, filter?:Partial<Model>) {
+    const eb = expressionBuilder<Database, 'model'>()
+    const filters: Expression<SqlBool>[] = []
+
+    if (ids.length > 0) {
+        filters.push(eb('model_id', 'in', ids.map(Number)));
+    }
+
+    if (filter?.model_id) {
+        filters.push(eb('model_name', 'like', `%${filter?.model_name}%`))
+    }
+
+    return eb.and(filters)
+}
+
+export async function getCount(ids: Array<number>, filter?:Partial<Model>): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('model')
         .select(
             (eb) => eb.fn.count<number>('model_id').as('model_count')
-        );
+        )
+        .where(withFilter(ids, filter))
 
-    if (ids.length > 0) {
-        query = query.where('model_id', 'in', ids.map(Number));
-    }
-
-    if (searchName) {
-        query = query.where('model_name', 'like', `%${searchName}%`)
-    }
     const result = await query.executeTakeFirstOrThrow();
     return result.model_count;
 }
 
-export async function getAll(ids: Array<number>, range?: Range, searchName?: string): Promise<Model[]> {
+export async function getAll(ids: Array<number>, range?: Range, filter?:Partial<Model>): Promise<Model[]> {
     const db = await connect();
-    let query = db.selectFrom('model')
+    let query = db.selectFrom('model').where(withFilter(ids, filter))
         .select([
             'model_id',
             'model_name',
             'model_brand_id'
         ]);
-
-    if (ids.length > 0) {
-        query = query.where('model_id', 'in', ids.map(Number));
-    }
-
-    if (searchName) {
-        query = query.where('model_name', 'like', `%${searchName}%`)
-    }
 
     if (range) {
         const rowCount = range.end - range.start + 1;

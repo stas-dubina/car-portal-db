@@ -5,14 +5,14 @@ import {
 } from 'react-admin';
 
 const searchFilters = [
-    <SearchInput placeholder="Пошук типу палива" source="name" alwaysOn />
+    <SearchInput placeholder="Пошук бренду" source="name" alwaysOn />
 ];
 
 export const BrandList = () => (
     <List filters={searchFilters}>
         <Datagrid>
             <TextField source="id" label="ID" />
-            <TextField source="name" label="Тип палива" />
+            <TextField source="name" label="Назва бренду" />
         </Datagrid>
     </List>
 );
