@@ -63,8 +63,7 @@ export async function getAll(ids: Array<number>, range?: Range, filter?: Partial
 
 export async function getById(id: number): Promise<UserView | undefined> {
     const db = await connect();
-    let query = selectUserView(db);
-    return await query
+    return await selectUserView(db)
         .where('user_id', '=', id)
         .executeTakeFirst()
 }

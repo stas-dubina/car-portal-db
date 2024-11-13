@@ -54,7 +54,8 @@ class UserMapper implements Mapper<UserView, UserDto> {
             user_phone: t.phone,
             user_email: t.email,
             user_city_id: t.cityId,
-            user_city_name: t.cityName        }
+            user_city_name: t.cityName
+        }
     }
 }
 

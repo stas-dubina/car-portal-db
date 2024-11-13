@@ -11,7 +11,7 @@ function withFilter(ids: Array<number>, filter?:Partial<Model>) {
         filters.push(eb('model_id', 'in', ids.map(Number)));
     }
 
-    if (filter?.model_id) {
+    if (filter?.model_name) {
         filters.push(eb('model_name', 'like', `%${filter?.model_name}%`))
     }
 
@@ -58,4 +58,10 @@ export async function getById(id: number): Promise<Model | undefined> {
         ])
         .where('model_id', '=', id)
         .executeTakeFirst();
+}
+
+export default {
+    getById,
+    getCount,
+    getAll
 }

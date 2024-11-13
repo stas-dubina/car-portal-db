@@ -1,6 +1,22 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from '@/lib/range';
-import {Brand} from "@/lib/db/types";
+import {Brand, Database} from "@/lib/db/types";
+import {Expression, expressionBuilder, SqlBool} from "kysely";
+
+function withFilter(ids: Array<number>, filter?:Partial<Brand>) {
+    const eb = expressionBuilder<Database, 'brand'>()
+    const filters: Expression<SqlBool>[] = []
+
+    if (ids.length > 0) {
+        filters.push(eb('brand_id', 'in', ids.map(Number)))
+    }
+
+    if (filter?.brand_name) {
+        filters.push(eb('brand_name', 'like', `%${filter?.brand_name}%`));
+    }
+
+    return eb.and(filters)
+}
 
 export async function getCount(ids: Array<number>, filter?:Partial<Brand>): Promise<number> {
     const db = await connect();
@@ -8,14 +24,9 @@ export async function getCount(ids: Array<number>, filter?:Partial<Brand>): Prom
     let query = db.selectFrom('brand')
         .select(
             (eb) => eb.fn.count<number>('brand_id').as('brand_count')
-        );
+        )
+        .where(withFilter(ids, filter))
 
-    if (ids.length > 0) {
-        query = query.where('brand_id', 'in', ids.map(Number));
-    }
-    if (filter?.brand_name) {
-        query = query.where('brand_name', 'like', `%${filter?.brand_name}%`);
-    }
     const result = await query.executeTakeFirstOrThrow();
     return result.brand_count;
 }
@@ -26,14 +37,9 @@ export async function getAll(ids: Array<number>, range?: Range, filter?:Partial<
         .select([
             'brand_id',
             'brand_name'
-        ]);
+        ])
+        .where(withFilter(ids, filter))
 
-    if (ids.length > 0) {
-        query = query.where('brand_id', 'in', ids.map(Number));
-    }
-    if (filter?.brand_name) {
-        query = query.where('brand_name', 'like', `%${filter?.brand_name}%`);
-    }
     if (range) {
         const rowCount = range.end - range.start + 1;
         query = query.limit(rowCount).offset(range.start)

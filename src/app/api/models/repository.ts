@@ -1,8 +1,6 @@
-import {Range} from "@/lib/range";
-import {SimpleSearchFilter} from "@/lib/params/simple_search_filter";
-import {getAll, getById, getCount} from "@/app/api/models/db_repository";
-import {ListResult, Repository} from "@/lib/repository";
 import {Model} from "@/lib/db/types";
+import CrudRepository, {Mapper} from "@/lib/crud_repository";
+import dbRepository from "@/app/api/models/db_repository";
 
 export type ModelDto = {
     id: number;
@@ -10,33 +8,31 @@ export type ModelDto = {
     brandId: number;
 }
 
-function mapToDto(m: Model) {
-    return {
-        id: m.model_id,
-        name: m.model_name,
-        brandId: m.model_brand_id,
-    }
-}
+class ModelMapper implements Mapper<Model, ModelDto> {
 
-class ModelRepository implements Repository<ModelDto> {
-
-    async findById(id: number): Promise<ModelDto | undefined> {
-        const model = await getById(id);
-        if(!model) {
-            return undefined;
-        }
-        return mapToDto(model);
-    }
-
-    async findAll(ids: Array<number>, range?: Range, filter?: SimpleSearchFilter): Promise<ListResult<ModelDto>> {
-        const totalCount = await getCount(ids, filter?.name);
-        const models = await getAll(ids, range, filter?.name);
-
+    toDto(e: Model): ModelDto {
         return {
-            total: totalCount,
-            list: models.map(m => mapToDto(m))
+            id: e.model_id,
+            name: e.model_name,
+            brandId: e.model_brand_id
+        }
+    }
+
+    toEntity(t: ModelDto): Model {
+        return {
+            model_id: t.id,
+            model_name: t.name,
+            model_brand_id: t.brandId
+        }
+    }
+
+    toEntityPartial(t: Partial<ModelDto>): Partial<Model> {
+        return {
+            model_id: t.id,
+            model_name: t.name,
+            model_brand_id: t.brandId
         }
     }
 }
 
-export default new ModelRepository();
+export default new CrudRepository<Model, ModelDto>(dbRepository, new ModelMapper());

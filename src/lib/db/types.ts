@@ -239,6 +239,10 @@ export type Order = Selectable<OrderTable>
 export type NewOrder = Insertable<OrderTable>
 export type UpdateOrder = Updateable<OrderTable>
 
+export type CarType = Selectable<CarTypeTable>
+export type NewCarType = Insertable<CarTypeTable>
+export type UpdateCarType = Updateable<CarTypeTable>
+
 export type BodyType = Selectable<BodyTypeTable>
 export type NewBodyType = Insertable<BodyTypeTable>
 export type UpdateBodyType = Updateable<BodyTypeTable>
