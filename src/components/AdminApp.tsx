@@ -10,6 +10,7 @@ import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import PaletteIcon from '@mui/icons-material/Palette';
 import PeopleIcon from '@mui/icons-material/People';
 import FireTruckIcon from '@mui/icons-material/FireTruck';
+import LocationCityIcon from '@mui/icons-material/LocationCity';
 import simpleRestProvider from "ra-data-simple-rest";
 import {CarList} from "@/components/cars/list";
 import {CarShow} from "@/components/cars/details";
@@ -21,6 +22,7 @@ import {GearTypeList} from "@/components/gear-types/list";
 import {ColorList} from "@/components/colors/list";
 import {UserList} from "@/components/users/list";
 import {CarTypeList} from "@/components/car-types/list";
+import {CityList} from "@/components/cities/list";
 
 const dataProvider = simpleRestProvider("http://localhost:3000/api");
 
@@ -94,6 +96,12 @@ const AdminApp = () => (
             list={CarList}
             show={CarShow}
             icon={DirectionsCarIcon}
+        />
+        <Resource
+            name="cities"
+            list={CityList}
+            show={ShowGuesser}
+            icon={LocationCityIcon}
         />
     </Admin>
 );
