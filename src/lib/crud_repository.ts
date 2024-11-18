@@ -14,21 +14,25 @@ export interface CrudDbRepository<E> {
     getCount(ids: Array<number>, filter?: Partial<E>): Promise<number>;
 
     getAll(ids: Array<number>, range?: Range, filter?: Partial<E>): Promise<E[]>
+
+    insert(e: E): Promise<number>;
+
+    deleteOne(id: number): Promise<void>;
 }
 
 export default class CrudRepository<E, T> implements Repository<T> {
 
-    private readonly crudRepository: CrudDbRepository<E>;
+    private readonly dbRepository: CrudDbRepository<E>;
     private readonly mapper: Mapper<E, T>;
 
     constructor(crudRepository: CrudDbRepository<E>,
                 mapper: Mapper<E, T>) {
-        this.crudRepository = crudRepository;
+        this.dbRepository = crudRepository;
         this.mapper = mapper;
     }
 
     async findById(id: number): Promise<T | undefined> {
-        const entity = await this.crudRepository.getById(id)
+        const entity = await this.dbRepository.getById(id)
 
         if (!entity) {
             return undefined;
@@ -40,8 +44,8 @@ export default class CrudRepository<E, T> implements Repository<T> {
     async findAll(ids: Array<number>, range?: Range, filter?: Partial<T>): Promise<ListResult<T>> {
         const dbFilter = filter && this.mapper.toEntityPartial(filter);
 
-        const totalCount = await this.crudRepository.getCount(ids, dbFilter);
-        const entities = await this.crudRepository.getAll(ids, range, dbFilter);
+        const totalCount = await this.dbRepository.getCount(ids, dbFilter);
+        const entities = await this.dbRepository.getAll(ids, range, dbFilter);
 
         return {
             total: totalCount,
@@ -49,4 +53,14 @@ export default class CrudRepository<E, T> implements Repository<T> {
         }
     }
 
+    async create(obj: T): Promise<T> {
+        const eCreate = this.mapper.toEntity(obj);
+        const id = await this.dbRepository.insert(eCreate);
+        const entity = await this.dbRepository.getById(id);
+        return this.mapper.toDto(entity!);
+    }
+
+    async deleteOne(id: number): Promise<void> {
+        await this.dbRepository.deleteOne(id);
+    }
 }

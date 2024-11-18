@@ -15,6 +15,10 @@ function withFilter(ids: Array<number>, filter?:Partial<Model>) {
         filters.push(eb('model_name', 'like', `%${filter?.model_name}%`))
     }
 
+    if (filter?.model_brand_id) {
+        filters.push(eb('model_brand_id', '=', filter?.model_brand_id))
+    }
+
     return eb.and(filters)
 }
 

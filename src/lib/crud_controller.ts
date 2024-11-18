@@ -43,4 +43,17 @@ export default class CrudController<E, T> {
 
         return NextResponse.json(element, {status: 200});
     }
+
+    public async create(request: Request) {
+        const createDto = await request.json()
+        const result = await this.repository.create(createDto)
+        return NextResponse.json(result, {status: 200});
+    }
+
+    public async deleteOne(request: Request, context: { params: PathParams }) {
+        const id = Number(context.params.id);
+        await this.repository.deleteOne(id)
+
+        return NextResponse.json({id: id}, {status: 200});
+    }
 }

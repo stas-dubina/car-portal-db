@@ -1,6 +1,6 @@
 // in src/components/AdminApp.tsx
 "use client";
-import {Admin, Resource, ListGuesser, EditGuesser, ShowGuesser, defaultDarkTheme} from "react-admin";
+import {Admin, Resource, EditGuesser, ShowGuesser, defaultDarkTheme} from "react-admin";
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -23,6 +23,9 @@ import {ColorList} from "@/components/colors/list";
 import {UserList} from "@/components/users/list";
 import {CarTypeList} from "@/components/car-types/list";
 import {CityList} from "@/components/cities/list";
+import {CarCreate} from "@/components/cars/create";
+import {BrandCreate} from "@/components/brands/create";
+import {ColorCreate} from "@/components/colors/create";
 
 const dataProvider = simpleRestProvider("http://localhost:3000/api");
 
@@ -46,61 +49,74 @@ const AdminApp = () => (
         <Resource
             name="brands"
             list={BrandList}
+            show={ShowGuesser}
             edit={EditGuesser}
+            create={BrandCreate}
             icon={CollectionsBookmarkIcon}
         />
         <Resource
             name="models"
             list={ModelList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={LibraryBooksIcon}
         />
         <Resource
             name="car-types"
             list={CarTypeList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={FireTruckIcon}
         />
         <Resource
             name="body-types"
             list={BodyTypeList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={AirportShuttleIcon}
         />
         <Resource
             name="fuel-types"
             list={FuelTypeList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={LocalGasStationIcon}
         />
         <Resource
             name="gear-types"
             list={GearTypeList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={SettingsApplicationsIcon}
         />
         <Resource
             name="colors"
             list={ColorList}
             show={ShowGuesser}
+            edit={EditGuesser}
+            create={ColorCreate}
             icon={PaletteIcon}
         />
         <Resource
             name="users"
             list={UserList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={PeopleIcon}
         />
         <Resource
             name="cars"
             list={CarList}
             show={CarShow}
+            edit={EditGuesser}
+            create={CarCreate}
             icon={DirectionsCarIcon}
         />
         <Resource
             name="cities"
             list={CityList}
             show={ShowGuesser}
+            edit={EditGuesser}
             icon={LocationCityIcon}
         />
     </Admin>

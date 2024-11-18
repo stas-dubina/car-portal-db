@@ -2,14 +2,13 @@ import {useParams} from 'react-router-dom';
 import {
     useGetOne,
     useRedirect,
-    Title,
     Loading,
     TextField,
-    ReferenceField,
     NumberField,
-    FunctionField, SelectField, DateField, BooleanField, RecordContextProvider, Labeled, Show, SimpleShowLayout
+    SelectField, DateField, BooleanField, RecordContextProvider,    Show, SimpleShowLayout
 } from 'react-admin';
 import React from "react";
+import {DRIVE_TYPES} from "@/components/cars/types";
 
 
 export const CarShow = () => {
@@ -59,11 +58,7 @@ export const CarShow = () => {
             <BooleanField source="inCredit" label="В кредиті" />
             <NumberField source="power" label="Потужність" />
             <NumberField source="seat" label="Кількість місць" />
-            <SelectField source="driveType" choices={[
-                {id: 'AWD', name: 'AWD'},
-                {id: 'RWD', name: 'RWD'},
-                {id: 'FWD', name: 'FWD'},
-            ]} label="Тип приводу" />
+            <SelectField source="driveType" choices={DRIVE_TYPES} label="Тип приводу" />
                 </SimpleShowLayout>
             </Show>
         </RecordContextProvider>

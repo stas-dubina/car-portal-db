@@ -3,7 +3,7 @@ import {Range} from '@/lib/range';
 import {Brand, Database} from "@/lib/db/types";
 import {Expression, expressionBuilder, SqlBool} from "kysely";
 
-function withFilter(ids: Array<number>, filter?:Partial<Brand>) {
+function withFilter(ids: Array<number>, filter?: Partial<Brand>) {
     const eb = expressionBuilder<Database, 'brand'>()
     const filters: Expression<SqlBool>[] = []
 
@@ -18,7 +18,7 @@ function withFilter(ids: Array<number>, filter?:Partial<Brand>) {
     return eb.and(filters)
 }
 
-export async function getCount(ids: Array<number>, filter?:Partial<Brand>): Promise<number> {
+export async function getCount(ids: Array<number>, filter?: Partial<Brand>): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('brand')
@@ -31,7 +31,7 @@ export async function getCount(ids: Array<number>, filter?:Partial<Brand>): Prom
     return result.brand_count;
 }
 
-export async function getAll(ids: Array<number>, range?: Range, filter?:Partial<Brand>): Promise<Brand[]> {
+export async function getAll(ids: Array<number>, range?: Range, filter?: Partial<Brand>): Promise<Brand[]> {
     const db = await connect();
     let query = db.selectFrom('brand')
         .select([
@@ -59,8 +59,28 @@ export async function getById(id: number): Promise<Brand | undefined> {
         .executeTakeFirst();
 }
 
+export async function insert(e: Brand): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('brand')
+        .values({
+            brand_name: e.brand_name
+        })
+        .returning(['brand_id'])
+        .executeTakeFirstOrThrow()
+    return result.brand_id
+}
+
+export async function deleteOne(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('brand')
+        .where('brand_id', '=', id)
+        .executeTakeFirst()
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    insert,
+    deleteOne
 }

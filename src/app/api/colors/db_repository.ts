@@ -62,8 +62,30 @@ export async function getById(id: number): Promise<Color | undefined> {
         .executeTakeFirst()
 }
 
+export async function insert(e: Color): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('color')
+        .values({
+            color_name: e.color_name,
+            color_value: e.color_value
+        })
+        .returning('color_id')
+        .executeTakeFirstOrThrow()
+
+    return result.color_id;
+}
+
+export async function deleteOne(id: number): Promise<void> {
+    const db = await connect()
+    await db.deleteFrom('color')
+        .where('color_id', '=', id)
+        .executeTakeFirst()
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    insert,
+    deleteOne
 }

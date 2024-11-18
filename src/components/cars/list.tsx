@@ -34,23 +34,23 @@ export const CarList = () => (
                 {id: 'SOLD', name: 'SOLD'},
                 {id: 'CANCELLED', name: 'CANCELLED'},
             ]} label="Статус"/>
-            <TextField source="colorName" label="Колір"/>
-            <DateField source="createdAt" label="Дата створення"/>
-            <TextField source="vin" label="VIN-код"/>
-            <TextField source="description" label="Опис"/>
-            <TextField source="bodyTypeName" label="Тип кузова"/>
-            <TextField source="carTypeName" label="Тип автомобіля"/>
-            <BooleanField source="accident" label="Був у ДТП"/>
-            <BooleanField source="abroad" label="Був за кордоном"/>
-            <NumberField source="ownerNumber" label="Кількість власників"/>
-            <BooleanField source="inCredit" label="В кредиті"/>
-            <NumberField source="power" label="Потужність"/>
-            <NumberField source="seat" label="Кількість місць"/>
-            <SelectField source="driveType" choices={[
-                {id: 'AWD', name: 'AWD'},
-                {id: 'RWD', name: 'RWD'},
-                {id: 'FWD', name: 'FWD'},
-            ]} label="Тип приводу"/>
+            {/*<TextField source="colorName" label="Колір"/>*/}
+            {/*<DateField source="createdAt" label="Дата створення"/>*/}
+            {/*<TextField source="vin" label="VIN-код"/>*/}
+            {/*<TextField source="description" label="Опис"/>*/}
+            {/*<TextField source="bodyTypeName" label="Тип кузова"/>*/}
+            {/*<TextField source="carTypeName" label="Тип автомобіля"/>*/}
+            {/*<BooleanField source="accident" label="Був у ДТП"/>*/}
+            {/*<BooleanField source="abroad" label="Був за кордоном"/>*/}
+            {/*<NumberField source="ownerNumber" label="Кількість власників"/>*/}
+            {/*<BooleanField source="inCredit" label="В кредиті"/>*/}
+            {/*<NumberField source="power" label="Потужність"/>*/}
+            {/*<NumberField source="seat" label="Кількість місць"/>*/}
+            {/*<SelectField source="driveType" choices={[*/}
+            {/*    {id: 'AWD', name: 'AWD'},*/}
+            {/*    {id: 'RWD', name: 'RWD'},*/}
+            {/*    {id: 'FWD', name: 'FWD'},*/}
+            {/*]} label="Тип приводу"/>*/}
         </Datagrid>
     </List>
 );
