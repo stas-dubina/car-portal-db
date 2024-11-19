@@ -34,4 +34,3 @@ export async function PUT(request: Request, context: { params: PathParams }) {
     return NextResponse.json(brand, {status: 200});
 
 }
-

@@ -1,6 +1,6 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
-import {BodyTypeView, Database} from "@/lib/db/types";
+import {BodyType, BodyTypeView, Database, NewBodyType} from "@/lib/db/types";
 import {Expression, expressionBuilder, Kysely, SqlBool} from "kysely";
 
 function withFilter(ids: Array<number>, filter?: Partial<BodyTypeView>) {
@@ -66,8 +66,29 @@ export async function getById(id: number): Promise<BodyTypeView | undefined> {
         .executeTakeFirst()
 }
 
+export async function insert(e: NewBodyType): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('body_type')
+        .values({
+            body_type_name: e.body_type_name,
+            body_car_type_id: e.body_car_type_id
+        })
+        .returning(['body_type_id'])
+        .executeTakeFirstOrThrow()
+    return result.body_type_id;
+}
+
+export async function deleteById(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('body_type')
+        .where('body_type_id', '=', id)
+        .executeTakeFirst()
+}
+
 export default {
     getById,
     getAll,
-    getCount
+    getCount,
+    insert,
+    deleteById
 }

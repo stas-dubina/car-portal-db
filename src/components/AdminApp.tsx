@@ -26,6 +26,8 @@ import {CityList} from "@/components/cities/list";
 import {CarCreate} from "@/components/cars/create";
 import {BrandCreate} from "@/components/brands/create";
 import {ColorCreate} from "@/components/colors/create";
+import {BodyTypeCreate} from "@/components/body-types/create";
+import {BodyTypeEdit} from "@/components/body-types/edit";
 
 const dataProvider = simpleRestProvider("http://localhost:3000/api");
 
@@ -72,7 +74,8 @@ const AdminApp = () => (
             name="body-types"
             list={BodyTypeList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={BodyTypeEdit}
+            create={BodyTypeCreate}
             icon={AirportShuttleIcon}
         />
         <Resource

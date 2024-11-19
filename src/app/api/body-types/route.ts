@@ -1,9 +1,9 @@
-import bodyTypeRepository, {BodyTypeDto} from "@/app/api/body-types/repository";
-import CrudController from "@/lib/crud_controller";
-import {BodyTypeView} from "@/lib/db/types";
-
-const controller = new CrudController<BodyTypeView, BodyTypeDto>('body-types', bodyTypeRepository)
+import {crudControllerView, crudControllerModify} from "./controller";
 
 export async function GET(request: Request) {
-    return controller.getAll(request);
+    return crudControllerView.getAll(request)
+}
+
+export async function POST(request: Request) {
+    return crudControllerModify.create(request)
 }

@@ -52,7 +52,7 @@ export default class CrudController<E, T> {
 
     public async deleteOne(request: Request, context: { params: PathParams }) {
         const id = Number(context.params.id);
-        await this.repository.deleteOne(id)
+        await this.repository.deleteById(id)
 
         return NextResponse.json({id: id}, {status: 200});
     }

@@ -17,7 +17,7 @@ export interface CrudDbRepository<E> {
 
     insert(e: E): Promise<number>;
 
-    deleteOne(id: number): Promise<void>;
+    deleteById(id: number): Promise<void>;
 }
 
 export default class CrudRepository<E, T> implements Repository<T> {
@@ -60,7 +60,7 @@ export default class CrudRepository<E, T> implements Repository<T> {
         return this.mapper.toDto(entity!);
     }
 
-    async deleteOne(id: number): Promise<void> {
-        await this.dbRepository.deleteOne(id);
+    async deleteById(id: number): Promise<void> {
+        await this.dbRepository.deleteById(id);
     }
 }
