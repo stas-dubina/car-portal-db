@@ -23,6 +23,7 @@ export interface Database {
     feature: FeatureTable
     car_feature: CarFeatureTable
     image: ImageTable
+    order: OrderTable
 }
 
 export interface CarTable {

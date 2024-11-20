@@ -1,6 +1,6 @@
 // in src/components/AdminApp.tsx
 "use client";
-import {Admin, Resource, EditGuesser, ShowGuesser, defaultDarkTheme} from "react-admin";
+import {Admin, Resource, EditGuesser, ShowGuesser, defaultDarkTheme, CustomRoutes, Menu, Layout} from "react-admin";
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -28,6 +28,10 @@ import {BrandCreate} from "@/components/brands/create";
 import {ColorCreate} from "@/components/colors/create";
 import {BodyTypeCreate} from "@/components/body-types/create";
 import {BodyTypeEdit} from "@/components/body-types/edit";
+import {Route} from "react-router";
+import {SalesStatistics} from "@/components/statistics/sales";
+import {OnSaleStatistics} from "@/components/statistics/on_sale";
+import {StatisticsList} from "@/components/statistics/list";
 
 const dataProvider = simpleRestProvider("http://localhost:3000/api");
 
@@ -44,10 +48,25 @@ const AppTheme = {
     },
 };
 
+export const MyMenu = () => (
+    <Menu>
+        <Menu.DashboardItem/>
+        <Menu.ResourceItems/>
+        <Menu.Item to="/statistics" primaryText="Statistic" leftIcon={<CollectionsBookmarkIcon/>}/>
+    </Menu>
+);
+
+export const MyLayout = ({children}) => (
+    <Layout menu={MyMenu}>
+        {children}
+    </Layout>
+);
+
 const AdminApp = () => (
     <Admin
         theme={AppTheme}
-        dataProvider={dataProvider}>
+        dataProvider={dataProvider}
+        layout={MyLayout} >
         <Resource
             name="brands"
             list={BrandList}
@@ -122,6 +141,11 @@ const AdminApp = () => (
             edit={EditGuesser}
             icon={LocationCityIcon}
         />
+        <CustomRoutes>
+            <Route path="/statistics" element={<StatisticsList/>}/>
+            <Route path="/statistics/on-sale" element={<OnSaleStatistics/>}/>
+            <Route path="/statistics/sales" element={<SalesStatistics/>}/>
+        </CustomRoutes>
     </Admin>
 );
 
