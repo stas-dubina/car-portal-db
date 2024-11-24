@@ -2,6 +2,7 @@ import {connect} from "@/lib/db/connection";
 import {Range} from '@/lib/range';
 import {Brand, Database} from "@/lib/db/types";
 import {Expression, expressionBuilder, SqlBool} from "kysely";
+import {id} from "date-fns/locale";
 
 function withFilter(ids: Array<number>, filter?: Partial<Brand>) {
     const eb = expressionBuilder<Database, 'brand'>()
@@ -70,11 +71,22 @@ export async function insert(e: Brand): Promise<number> {
     return result.brand_id
 }
 
-export async function deleteOne(id: number): Promise<void> {
+export async function deleteById(id: number): Promise<void> {
     const db = await connect();
     await db.deleteFrom('brand')
         .where('brand_id', '=', id)
         .executeTakeFirst()
+}
+
+export async function update(e: Brand): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('brand')
+        .set({
+            brand_name: e.brand_name
+        })
+        .where('brand_id', '=', e.brand_id)
+        .executeTakeFirstOrThrow()
+    return result.numUpdatedRows != BigInt(0)
 }
 
 export default {
@@ -82,5 +94,6 @@ export default {
     getCount,
     getAll,
     insert,
-    deleteOne
+    deleteById,
+    update
 }

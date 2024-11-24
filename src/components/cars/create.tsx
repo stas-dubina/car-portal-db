@@ -136,11 +136,6 @@ export const CarCreate = () => (
                 <Grid item xs={9}>
                 </Grid>
                 <Grid item xs={12}>
-                    <ImageInput source="images" label="Зображення">
-                        <ImageField source="src" title="title" />
-                    </ImageInput>
-                </Grid>
-                <Grid item xs={12}>
                     <SaveButton />
                 </Grid>
             </Grid>

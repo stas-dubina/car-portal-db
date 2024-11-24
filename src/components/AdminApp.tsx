@@ -1,6 +1,6 @@
 // in src/components/AdminApp.tsx
 "use client";
-import {Admin, Resource, EditGuesser, ShowGuesser, defaultDarkTheme, CustomRoutes, Menu, Layout} from "react-admin";
+import {Admin, CustomRoutes, defaultDarkTheme, EditGuesser, Layout, Menu, Resource, ShowGuesser} from "react-admin";
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
@@ -32,8 +32,12 @@ import {Route} from "react-router";
 import {SalesStatistics} from "@/components/statistics/sales";
 import {OnSaleStatistics} from "@/components/statistics/on_sale";
 import {StatisticsList} from "@/components/statistics/list";
+import {BrandEdit} from "@/components/brands/edit";
+import {CarEdit} from "@/components/cars/edit";
+import {ImagesList} from "@/components/images/list";
+import {CreateImage} from "@/components/images/create";
+import {dataProvider} from "@/components/dataprovider";
 
-const dataProvider = simpleRestProvider("http://localhost:3000/api");
 
 const AppTheme = {
     ...defaultDarkTheme,
@@ -50,12 +54,12 @@ const AppTheme = {
 
 export const MyMenu = () => (
     <Menu>
-        <Menu.DashboardItem/>
         <Menu.ResourceItems/>
         <Menu.Item to="/statistics" primaryText="Statistic" leftIcon={<CollectionsBookmarkIcon/>}/>
     </Menu>
 );
 
+// @ts-ignore
 export const MyLayout = ({children}) => (
     <Layout menu={MyMenu}>
         {children}
@@ -66,12 +70,12 @@ const AdminApp = () => (
     <Admin
         theme={AppTheme}
         dataProvider={dataProvider}
-        layout={MyLayout} >
+        layout={MyLayout}>
         <Resource
             name="brands"
             list={BrandList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={BrandEdit}
             create={BrandCreate}
             icon={CollectionsBookmarkIcon}
         />
@@ -130,10 +134,13 @@ const AdminApp = () => (
             name="cars"
             list={CarList}
             show={CarShow}
-            edit={EditGuesser}
+            edit={CarEdit}
             create={CarCreate}
             icon={DirectionsCarIcon}
-        />
+        >
+            <Route path=":carId/images" element={<ImagesList/>}/>
+            <Route path=":carId/images/create" element={<CreateImage/>}/>
+        </Resource>
         <Resource
             name="cities"
             list={CityList}

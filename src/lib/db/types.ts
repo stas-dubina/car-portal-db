@@ -80,7 +80,7 @@ export interface CarFeatureTable {
 
 export interface ImageTable {
     image_id: Generated<number>
-    image_file: Buffer
+    image_file: string
     image_car_id: number
 }
 

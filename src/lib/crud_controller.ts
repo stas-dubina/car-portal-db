@@ -3,7 +3,7 @@ import {NextResponse} from "next/server";
 import CrudRepository from "@/lib/crud_repository";
 
 export type PathParams = {
-    id: Number
+    id: number
 }
 
 export default class CrudController<E, T> {
@@ -55,5 +55,19 @@ export default class CrudController<E, T> {
         await this.repository.deleteById(id)
 
         return NextResponse.json({id: id}, {status: 200});
+    }
+
+    public async updateOne(request: Request, context: { params: PathParams }) {
+        const id = Number(context.params.id);
+        const update = await request.json()
+
+        const updated = await this.repository.update(update)
+
+        if (!updated) {
+            return NextResponse.json({ error: 'Запис не знайдено' }, { status: 404 });
+        }
+
+        const brand = await this.repository.findById(id);
+        return NextResponse.json(brand, { status: 200 });
     }
 }

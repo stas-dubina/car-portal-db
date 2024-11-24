@@ -17,6 +17,8 @@ export interface CrudDbRepository<E> {
 
     insert(e: E): Promise<number>;
 
+    update(e: E): Promise<boolean>;
+
     deleteById(id: number): Promise<void>;
 }
 
@@ -62,5 +64,10 @@ export default class CrudRepository<E, T> implements Repository<T> {
 
     async deleteById(id: number): Promise<void> {
         await this.dbRepository.deleteById(id);
+    }
+
+    async update(obj: T): Promise<boolean> {
+        const eUpdate = this.mapper.toEntity(obj);
+        return await this.dbRepository.update(eUpdate);
     }
 }
