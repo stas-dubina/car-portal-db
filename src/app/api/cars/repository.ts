@@ -16,6 +16,7 @@ export type CarDto = {
     power: number;
     seat: number;
     drive_type: CarDriveType;
+    imageName: string;
 }
 
 export type CarView = {

@@ -37,6 +37,7 @@ import {CarEdit} from "@/components/cars/edit";
 import {ImagesList} from "@/components/images/list";
 import {CreateImage} from "@/components/images/create";
 import {dataProvider} from "@/components/dataprovider";
+import {CarSearchList} from "@/components/cars/car_search_list";
 
 
 const AppTheme = {
@@ -132,7 +133,7 @@ const AdminApp = () => (
         />
         <Resource
             name="cars"
-            list={CarList}
+            list={CarSearchList}
             show={CarShow}
             edit={CarEdit}
             create={CarCreate}

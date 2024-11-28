@@ -2,8 +2,9 @@ import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
 import {CarSearchFilter} from "@/app/api/cars/car_search_filter";
 import {CarDriveType, CarStatus} from "@/lib/db/types";
+import {expressionBuilder} from "kysely";
 
-export async function getCount(ids: Array<number>, filter:CarSearchFilter): Promise<number> {
+export async function getCount(ids: Array<number>, filter: CarSearchFilter): Promise<number> {
     const db = await connect();
 
     let query = db.selectFrom('car')
@@ -39,8 +40,13 @@ export async function getCount(ids: Array<number>, filter:CarSearchFilter): Prom
     return result.car_count;
 }
 
-export async function getAll(ids: Array<number>, filter:CarSearchFilter, range?: Range) {
+export async function getAll(ids: Array<number>, filter: CarSearchFilter, range?: Range) {
     const db = await connect();
+    /*
+    select * from car left join
+    (select image_car_id, min(image_id) as image_id from image group by image_car_id) as top_image on top_image.image_car_id = car_id
+    left join image i on i.image_id = top_image.image_id
+     */
     let query = db.selectFrom('car as c')
         .innerJoin('body_type as bt', 'bt.body_type_id', 'c.car_body_type_id')
         .innerJoin('car_type as ct', 'ct.car_type_id', 'bt.body_car_type_id')
@@ -50,6 +56,19 @@ export async function getAll(ids: Array<number>, filter:CarSearchFilter, range?:
         .innerJoin('model as m', 'm.model_id', 'c.car_model_id')
         .innerJoin('brand as b', 'b.brand_id', 'm.model_brand_id')
         .innerJoin('user as u', 'u.user_id', 'c.car_user_id')
+        .leftJoin(
+            eb =>
+                eb.selectFrom('image')
+                    .select(ebTopImage => [
+                        'image_car_id',
+                        ebTopImage.fn.min('image_id').as('image_id')
+                    ])
+                    .groupBy('image_car_id')
+                    .as('top_image'),
+            join =>
+                join.onRef('top_image.image_car_id', '=', 'c.car_id')
+        )
+        .leftJoin('image as i', 'i.image_id', 'top_image.image_id')
         .select([
             'c.car_id as id',
             'b.brand_id as brandId',
@@ -85,7 +104,9 @@ export async function getAll(ids: Array<number>, filter:CarSearchFilter, range?:
             'c.car_in_credit as inCredit',
             'c.car_power as power',
             'c.car_seat as seat',
-            'c.car_drive_type as driveType'
+            'c.car_drive_type as driveType',
+            'i.image_id as imageId',
+            'i.image_file as imageFile',
         ]);
 
     if (ids.length > 0) {
