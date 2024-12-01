@@ -69,6 +69,7 @@ export async function getAll(ids: Array<number>, filter: CarSearchFilter, range?
                 join.onRef('top_image.image_car_id', '=', 'c.car_id')
         )
         .leftJoin('image as i', 'i.image_id', 'top_image.image_id')
+        .innerJoin('city', 'city.city_id', 'u.user_city_id')
         .select([
             'c.car_id as id',
             'b.brand_id as brandId',
@@ -107,6 +108,8 @@ export async function getAll(ids: Array<number>, filter: CarSearchFilter, range?
             'c.car_drive_type as driveType',
             'i.image_id as imageId',
             'i.image_file as imageFile',
+            'city.city_id as cityId',
+            'city.city_name as cityName'
         ]);
 
     if (ids.length > 0) {
