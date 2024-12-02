@@ -93,7 +93,6 @@ export const CarList = () => {
                                     <LocationCityIcon/>
                                     <div style={{paddingTop: 5}}>{car.cityName} </div>
                                 </Box>
-
                             </CardContent>
                         </Box>
                     </Card>
