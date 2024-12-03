@@ -38,6 +38,8 @@ import {ImagesList} from "@/components/images/list";
 import {CreateImage} from "@/components/images/create";
 import {dataProvider} from "@/components/dataprovider";
 import {CarSearchList} from "@/components/cars/car_search_list";
+import {authProvider} from "@/components/authprovider";
+import {MyAppBar} from "@/components/appbar/appbar";
 
 
 const AppTheme = {
@@ -62,7 +64,7 @@ export const MyMenu = () => (
 
 // @ts-ignore
 export const MyLayout = ({children}) => (
-    <Layout menu={MyMenu}>
+    <Layout menu={MyMenu} appBar={MyAppBar}>
         {children}
     </Layout>
 );
@@ -71,6 +73,7 @@ const AdminApp = () => (
     <Admin
         theme={AppTheme}
         dataProvider={dataProvider}
+        authProvider={authProvider}
         layout={MyLayout}>
         <Resource
             name="brands"
