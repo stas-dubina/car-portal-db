@@ -2,7 +2,6 @@ import {connect} from "@/lib/db/connection";
 import {Range} from '@/lib/range';
 import {Brand, Database} from "@/lib/db/types";
 import {Expression, expressionBuilder, SqlBool} from "kysely";
-import {id} from "date-fns/locale";
 
 function withFilter(ids: Array<number>, filter?: Partial<Brand>) {
     const eb = expressionBuilder<Database, 'brand'>()

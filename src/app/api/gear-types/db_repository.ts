@@ -37,7 +37,8 @@ export async function getAll(ids:Array<number>, range?:Range, filter?: Partial<G
         .select([
             'gear_type_id',
             'gear_type_name'
-        ]);
+        ])
+        .where(withFilter(ids, filter))
 
     if (range) {
         const rowCount = range.end - range.start + 1;
@@ -58,8 +59,40 @@ export async function getById(id:number): Promise<GearType | undefined> {
         .executeTakeFirst()
 }
 
+export async function insert(e: GearType): Promise<number> {
+    const db = await connect();
+    const result = await db.selectFrom('gear_type')
+        .values({
+            gear_type_name: e.gear_type_name
+        })
+        .returning(['gear_type_id'])
+        .executeTakeFirstOrThrow()
+    return result.gear_type_id;
+}
+
+export async function deleteById(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('gear_type')
+        .where('gear_type_id', '=', id)
+        .executeTakeFirst()
+}
+
+export async function update(e: GearType): Promise<boolean> {
+    const db = await connect();
+    const result = await db.selectFrom('gear_type')
+        .set({
+            gear_type_name: e.gear_type_name
+        })
+        .where('gear_type_id', '=', e.gear_type_id)
+        .executeTakeFirst()
+    return result.numUpdatedRows != BigInt(0)
+}
+
 export default {
     getById,
     getAll,
-    getCount
+    getCount,
+    insert,
+    deleteById,
+    update
 }

@@ -67,7 +67,7 @@ export default class CrudController<E, T> {
             return NextResponse.json({ error: 'Запис не знайдено' }, { status: 404 });
         }
 
-        const brand = await this.repository.findById(id);
-        return NextResponse.json(brand, { status: 200 });
+        const result = await this.repository.findById(id);
+        return NextResponse.json(result, { status: 200 });
     }
 }

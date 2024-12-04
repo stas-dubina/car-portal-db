@@ -37,7 +37,8 @@ export async function getAll(ids:Array<number>, range?:Range, filter?:Partial<Fu
         .select([
             'fuel_type_id',
             'fuel_type_name'
-        ]);
+        ])
+        .where(withFilter(ids, filter))
 
     if (range) {
         const rowCount = range.end - range.start + 1;
@@ -58,8 +59,40 @@ export async function getById(id:number): Promise<FuelType | undefined> {
         .executeTakeFirst()
 }
 
+export async function insert(e: FuelType): Promise<number> {
+    const db = await connect();
+    const result = await db.selectFrom('fuel_type')
+        .values({
+            fuel_type_name: e.fuel_type_name
+        })
+        .returning(['fuel_type_id'])
+        .executeTakeFirst()
+    return result.fuel_type_id;
+}
+
+export async function deleteById(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('fuel_type')
+        .where('fuel_type_id', '=', id)
+        .executeTakeFirst()
+}
+
+export async function update(e: FuelType): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('fuel_type')
+        .set({
+            fuel_type_name: e.fuel_type_name
+        })
+        .where('fuel_type_id', '=', e.fuel_type_id)
+        .executeTakeFirst()
+    return result.numUpdatedRows != BigInt(0)
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    insert,
+    deleteById,
+    update
 }

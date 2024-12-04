@@ -40,6 +40,8 @@ import {dataProvider} from "@/components/dataprovider";
 import {CarSearchList} from "@/components/cars/car_search_list";
 import {authProvider} from "@/components/authprovider";
 import {MyAppBar} from "@/components/appbar/appbar";
+import {GearTypeEdit} from "@/components/gear-types/edit";
+import {FuelTypeEdit} from "@/components/fuel-types/edit";
 
 
 const AppTheme = {
@@ -109,14 +111,14 @@ const AdminApp = () => (
             name="fuel-types"
             list={FuelTypeList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={FuelTypeEdit}
             icon={LocalGasStationIcon}
         />
         <Resource
             name="gear-types"
             list={GearTypeList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={GearTypeEdit}
             icon={SettingsApplicationsIcon}
         />
         <Resource
