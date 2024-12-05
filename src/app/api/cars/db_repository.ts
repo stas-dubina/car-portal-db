@@ -36,6 +36,10 @@ export async function getCount(ids: Array<number>, filter: CarSearchFilter): Pro
         query = query.where('car_status', '=', filter.status as CarStatus)
     }
 
+    if (filter.userId) {
+        query = query.where('car_user_id', '=', filter.userId)
+    }
+
     const result = await query.executeTakeFirstOrThrow();
     return result.car_count;
 }
@@ -140,6 +144,10 @@ export async function getAll(ids: Array<number>, filter: CarSearchFilter, range?
         query = query.where('car_status', '=', filter.status as CarStatus)
     }
 
+    if (filter.userId) {
+        query = query.where('car_user_id', '=', filter.userId)
+    }
+
     if (range) {
         const rowCount = range.end - range.start + 1;
         query = query.limit(rowCount).offset(range.start)
@@ -155,8 +163,46 @@ export async function getById(id: number) {
         .executeTakeFirst();
 }
 
+export async function updateCarStatus(id: number, carStatus: CarStatus) {
+    const db = await connect();
+    await db.updateTable('car')
+        .set({
+            car_status: carStatus
+        })
+        .where('car_id', '=', id)
+        .where('car_status', '=', 'ON_SALE')
+        .executeTakeFirstOrThrow()
+}
+
+export async function cancelCar(id: number) {
+    const db = await connect();
+    await updateCarStatus(id, 'CANCELLED')
+}
+
+export async function insertOrder(id: number, price: number) {
+    const db = await connect();
+    await db.insertInto('order')
+        .values({
+            order_car_id: id,
+            order_price: price,
+            order_created_at: new Date()
+        })
+        .returning(['order_id'])
+        .executeTakeFirst()
+}
+
+export async function soldCar(id: number, price: number) {
+    // VercelPostgresError - 'kysely_transactions_not_supported': Transactions are not supported yet.
+    // await db.transaction().execute(async (trx) => {
+    await updateCarStatus(id, 'SOLD')
+    await insertOrder(id, price)
+    // })
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    cancelCar,
+    soldCar
 }

@@ -61,7 +61,7 @@ export async function getById(id:number): Promise<GearType | undefined> {
 
 export async function insert(e: GearType): Promise<number> {
     const db = await connect();
-    const result = await db.selectFrom('gear_type')
+    const result = await db.insertInto('gear_type')
         .values({
             gear_type_name: e.gear_type_name
         })

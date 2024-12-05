@@ -59,8 +59,40 @@ export async function getById(id: number): Promise<CarType | undefined> {
         .executeTakeFirst()
 }
 
+export async function insert(e: CarType): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('car_type')
+        .values({
+            car_type_name: e.car_type_name
+        })
+        .returning(['car_type_id'])
+        .executeTakeFirstOrThrow()
+    return result.car_type_id
+}
+
+export async function deleteById(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('car_type')
+        .where('car_type_id', '=', id)
+        .executeTakeFirst()
+}
+
+export async function update(e: CarType): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('car_type')
+        .set({
+            car_type_name: e.car_type_name
+        })
+        .where('car_type_id', '=', e.car_type_id)
+        .executeTakeFirst()
+    return result.numUpdatedRows != BigInt(0)
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    insert,
+    deleteById,
+    update
 }

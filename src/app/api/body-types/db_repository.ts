@@ -85,10 +85,22 @@ export async function deleteById(id: number): Promise<void> {
         .executeTakeFirst()
 }
 
+export async function update(e: BodyType): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('body_type')
+        .set({
+            body_type_name: e.body_type_name
+        })
+        .where("body_type_id", "=", e.body_type_id)
+        .executeTakeFirst()
+    return result.numUpdatedRows != BigInt(0)
+}
+
 export default {
     getById,
     getAll,
     getCount,
     insert,
-    deleteById
+    deleteById,
+    update
 }

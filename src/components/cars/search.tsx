@@ -23,7 +23,7 @@ export const CarFilter = () => {
     ];
 
     return (
-        <Card sx={{order: -1, mr: 2, mt: 6, width: 300}}>
+        <Card sx={{order: -1, mr: 2, width: 300}}>
             <CardContent>
                 <FilterContext.Provider value={searchFilters}>
                     <FilterForm filters={searchFilters}/>

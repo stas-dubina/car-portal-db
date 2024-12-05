@@ -1,15 +1,5 @@
-import {Button, Link, List, useListContext} from 'react-admin';
-import {CarFilter} from "@/components/cars/search";
-import {
-    Box,
-    Card,
-    CardContent,
-    CardMedia,
-    ImageList,
-    ImageListItem,
-    useMediaQuery,
-    useTheme
-} from "@mui/material";
+import {Link,  useListContext} from 'react-admin';
+import {Box, Card, CardContent, CardMedia, ImageList, ImageListItem, useMediaQuery, useTheme} from "@mui/material";
 import CarCrashIcon from '@mui/icons-material/CarCrash';
 import SpeedIcon from '@mui/icons-material/Speed';
 import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
@@ -32,7 +22,7 @@ const useColsForWidth = () => {
 };
 
 // @ts-ignore
-export const CarImage = ({car}) => {
+const CarImage = ({car}) => {
     return (
         <div style={{display: "flex"}}>
             {car.imageFile &&
@@ -100,13 +90,5 @@ export const CarList = () => {
             ))
             }
         </ImageList>
-    );
-}
-
-export const CarSearchList = () => {
-    return (
-        <List aside={<CarFilter/>}>
-            <CarList/>
-        </List>
     );
 }

@@ -47,6 +47,9 @@ class BodyTypeMapper implements Mapper<BodyTypeView, BodyTypeViewDto> {
 }
 
 class BodyTypeViewDbRepository implements CrudDbRepository<BodyTypeView> {
+    update(e: BodyTypeView): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
 
     getById(id: number): Promise<BodyTypeView | undefined> {
         return dbRepository.getById(id)

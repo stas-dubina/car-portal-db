@@ -59,8 +59,40 @@ export async function getById(id: number): Promise<City | undefined> {
         .executeTakeFirst()
 }
 
+export async function insert(e: City): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('city')
+        .values({
+            city_name: e.city_name
+        })
+        .returning(['city_id'])
+        .executeTakeFirstOrThrow()
+    return result.city_id
+}
+
+export async function deleteById(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('city')
+        .where('city_id', '=', id)
+        .executeTakeFirst()
+}
+
+export async function update(e: City): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('city')
+        .set({
+            city_name: e.city_name
+        })
+        .where('city_id', '=', e.city_id)
+        .executeTakeFirstOrThrow()
+    return result.numUpdatedRows != BigInt(0)
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    insert,
+    deleteById,
+    update
 }

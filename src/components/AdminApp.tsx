@@ -37,11 +37,12 @@ import {CarEdit} from "@/components/cars/edit";
 import {ImagesList} from "@/components/images/list";
 import {CreateImage} from "@/components/images/create";
 import {dataProvider} from "@/components/dataprovider";
-import {CarSearchList} from "@/components/cars/car_search_list";
+import {CarSearchList} from "@/components/search/car_search_list";
 import {authProvider} from "@/components/authprovider";
 import {MyAppBar} from "@/components/appbar/appbar";
 import {GearTypeEdit} from "@/components/gear-types/edit";
 import {FuelTypeEdit} from "@/components/fuel-types/edit";
+import {GearTypeCreate} from "@/components/gear-types/create";
 
 
 const AppTheme = {
@@ -119,6 +120,7 @@ const AdminApp = () => (
             list={GearTypeList}
             show={ShowGuesser}
             edit={GearTypeEdit}
+            create={GearTypeCreate}
             icon={SettingsApplicationsIcon}
         />
         <Resource
@@ -138,7 +140,7 @@ const AdminApp = () => (
         />
         <Resource
             name="cars"
-            list={CarSearchList}
+            list={CarList}
             show={CarShow}
             edit={CarEdit}
             create={CarCreate}

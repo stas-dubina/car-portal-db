@@ -1,6 +1,6 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
-import {Database, UserView} from "@/lib/db/types";
+import {Database, User, UserView} from "@/lib/db/types";
 import {Expression, expressionBuilder, Kysely, SqlBool} from "kysely";
 
 function withFilter(ids: Array<number>, filter?:Partial<UserView>) {

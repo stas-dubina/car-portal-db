@@ -9,6 +9,7 @@ export type ColorDto = {
 }
 
 class ColorMapper implements Mapper<Color, ColorDto> {
+
     toDto(e: Color): ColorDto {
         return {
             id: e.color_id,

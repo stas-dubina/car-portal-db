@@ -3,5 +3,6 @@ export type CarSearchFilter = {
     driveType?: string,
     inCredit?: boolean,
     abroad?: boolean,
-    status?: string
+    status?: string,
+    userId?: number
 }

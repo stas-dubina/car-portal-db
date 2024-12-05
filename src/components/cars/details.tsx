@@ -1,14 +1,14 @@
 import {useParams} from 'react-router-dom';
 import {
-    BooleanField,
-    DateField,
+    BooleanField, CreateButton,
+    DateField, EditButton,
     Labeled,
     List,
     Loading,
     NumberField,
     RecordContextProvider,
     SelectField,
-    TextField,
+    TextField, TopToolbar,
     useGetOne,
     useListContext,
     useRedirect
@@ -151,6 +151,18 @@ export const StatusDetails = ({car}) => (
     </SectionCard>
 );
 
+const Actions = () => (
+    <TopToolbar>
+        <EditButton />
+    </TopToolbar>
+);
+
+const ImagesActions = () => (
+    <TopToolbar>
+        <CreateButton />
+    </TopToolbar>
+);
+
 export const CarShow = () => {
     const {id} = useParams();
     const redirect = useRedirect();
@@ -167,7 +179,8 @@ export const CarShow = () => {
     return (
         <Box sx={{display: 'flex', flexDirection: 'row'}}>
             <RecordContextProvider value={data}>
-                <Box sx={{padding: 2}}>
+                <Box sx={{mr: 2}}>
+                    <Actions/>
                     <VehicleDetails car={data}/>
                     <OwnerDetails car={data}/>
                     <TechnicalDetails car={data}/>
@@ -175,7 +188,7 @@ export const CarShow = () => {
                 </Box>
             </RecordContextProvider>
 
-            <List resource={`cars/${id}/images`}>
+            <List resource={`cars/${id}/images`} actions={<ImagesActions/>}>
                 <CarImages/>
             </List>
         </Box>

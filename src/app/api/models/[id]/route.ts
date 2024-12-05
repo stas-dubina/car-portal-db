@@ -1,20 +1,14 @@
-import {NextResponse} from 'next/server';
-import modelRepository from "@/app/api/models/repository";
+import {PathParams} from "@/lib/crud_controller";
+import {crudController} from "@/app/api/car-types/controller";
 
-type Params = {
-    id: Number
+export async function GET(request: Request, context: { params: PathParams }) {
+    return crudController.getOne(request, context)
 }
 
-export async function GET(request: Request, context: { params: Params }) {
-    const id = Number(context.params.id);
-
-    const model = await modelRepository.findById(id);
-
-    if (!model) {
-        return NextResponse.json({error: 'Модель не знайдено'}, {status: 404});
-    }
-
-    return NextResponse.json(model, {status: 200});
-
+export async function DELETE(request: Request, context: { params: PathParams }) {
+    return crudController.deleteOne(request, context)
 }
 
+export async function PUT(request: Request, context: { params: PathParams }) {
+    return crudController.updateOne(request, context)
+}

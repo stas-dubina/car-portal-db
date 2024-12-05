@@ -64,8 +64,42 @@ export async function getById(id: number): Promise<Model | undefined> {
         .executeTakeFirst();
 }
 
+export async function insert(e: Model): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('model')
+        .values({
+            model_name: e.model_name,
+            model_brand_id: e.model_brand_id
+        })
+        .returning(['model_id'])
+        .executeTakeFirstOrThrow()
+    return result.model_id
+}
+
+export async function deleteById(id: number): Promise<void> {
+    const db = await connect();
+    await db.deleteFrom('model')
+        .where('model_id', '=', id)
+        .executeTakeFirst()
+}
+
+export async function update(e: Model): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('model')
+        .set({
+            model_name: e.model_name,
+            model_brand_id: e.model_brand_id,
+        })
+        .where('model_id', '=', e.model_id)
+        .executeTakeFirstOrThrow()
+    return result.numUpdatedRows != BigInt(0)
+}
+
 export default {
     getById,
     getCount,
-    getAll
+    getAll,
+    update,
+    insert,
+    deleteById
 }

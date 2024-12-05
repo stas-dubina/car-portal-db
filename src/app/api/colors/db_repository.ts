@@ -75,11 +75,23 @@ export async function insert(e: Color): Promise<number> {
     return result.color_id;
 }
 
-export async function deleteOne(id: number): Promise<void> {
+export async function deleteById(id: number): Promise<void> {
     const db = await connect()
     await db.deleteFrom('color')
         .where('color_id', '=', id)
         .executeTakeFirst()
+}
+
+export async function update(e: Color): Promise<boolean> {
+    const db = await connect()
+    const result = await db.updateTable('color')
+        .set({
+            color_name: e.color_name,
+            color_value: e.color_value
+        })
+        .where('color_id', '=', e.color_id)
+        .executeTakeFirst()
+    return result.numUpdatedRows != BigInt(0)
 }
 
 export default {
@@ -87,5 +99,6 @@ export default {
     getCount,
     getAll,
     insert,
-    deleteOne
+    deleteById,
+    update
 }

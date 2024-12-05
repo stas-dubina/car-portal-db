@@ -32,6 +32,9 @@ class BodyTypeMapper implements Mapper<NewBodyType, BodyTypeDto> {
 }
 
 class BodyTypeDbRepository implements CrudDbRepository<NewBodyType> {
+    update(e: { body_type_name: string; body_car_type_id: number; } & { body_type_id?: number | undefined; }): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
     async getById(id: number): Promise<NewBodyType | undefined> {
         const bodyType = await dbRepository.getById(id)
 
