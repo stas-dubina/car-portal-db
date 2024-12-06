@@ -7,20 +7,6 @@ import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import React from "react";
 
-const useColsForWidth = () => {
-    const theme = useTheme();
-    const sm = useMediaQuery(theme.breakpoints.up('sm'));
-    const md = useMediaQuery(theme.breakpoints.up('md'));
-    const lg = useMediaQuery(theme.breakpoints.up('lg'));
-    const xl = useMediaQuery(theme.breakpoints.up('xl'));
-    // there are all dividers of 24, to have full rows on each page
-    if (xl) return 2;
-    if (lg) return 2;
-    if (md) return 2;
-    if (sm) return 2;
-    return 1;
-};
-
 // @ts-ignore
 const CarImage = ({car}) => {
     return (
@@ -37,7 +23,7 @@ const CarImage = ({car}) => {
 
 export const CarList = () => {
     const {data} = useListContext();
-    const cols = useColsForWidth();
+    const cols = 3;
 
     if (!data) return null;
 
@@ -65,7 +51,7 @@ export const CarList = () => {
                                 >
                                     {`${car.brandName} ${car.modelName} ${car.year}`}
                                 </Link>
-                                <h4 style={{color: '#3c9806'}}>
+                                <h4 style={{color: '#3c9806', margin: 0}}>
                                     {`${(car.price).toLocaleString('en-us', {minimumFractionDigits: 0})} $`}
                                 </h4>
                                 <Box sx={{display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center'}}>

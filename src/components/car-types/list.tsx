@@ -8,7 +8,7 @@ export const CarTypeList = () => (
     <List filters={searchFilters}>
         <Datagrid>
             <TextField source="id" label="ID"/>
-            <TextField source="name" label="Тип кузова"/>
+            <TextField source="name" label="Тип автомобіля"/>
         </Datagrid>
     </List>
 );

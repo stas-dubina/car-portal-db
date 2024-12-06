@@ -50,7 +50,7 @@ const ModelInput = () => {
 
 export const CarEdit = () => {
     return (
-        <Edit actions={<EditActions/>}>
+        <Edit actions={<EditActions/>} mutationMode="pessimistic">
             <Form>
                 <Grid container sx={{m: 2}}>
                     <Grid item xs={3}>

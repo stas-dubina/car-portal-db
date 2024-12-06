@@ -9,7 +9,7 @@ export const BodyTypeEdit = () => {
     });
 
     return (
-        <Edit transform={transform}>
+        <Edit transform={transform} mutationMode="pessimistic">
             <SimpleForm>
                 <TextInput source="name" label="Тип кузова" required={true}/>
 

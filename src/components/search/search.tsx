@@ -7,39 +7,28 @@ import {
 import {Box, Card, CardContent} from '@mui/material';
 import CategoryIcon from '@mui/icons-material/LocalOffer';
 
-export const CarFilter = () => {
+export const CarSearch = () => {
 
-    /*const {data, isPending} = useGetMany(
-        'brands',
-        {}
-    );*/
-
+    const searchFieldWidth = 220;
     const searchFilters = [
         <ReferenceInput name="test" source="brandId" reference="brands" alwaysOn>
-            <SelectInput label="Марка"/>
+            <SelectInput label="Марка" sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>
         </ReferenceInput>,
-        <TextInput name="priceMin" source="priceMin" label="Ціна від" alwaysOn/>,
-        <TextInput name="priceMax" source="priceMax" label="Ціна до" alwaysOn/>,
-        <TextInput name="yearMin" source="yearMin" label="Рік від" alwaysOn/>,
-        <TextInput name="yearMax" source="yearMax" label="Рік до" alwaysOn/>
+        <TextInput name="priceMin" source="priceMin" label="Ціна від" alwaysOn sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>,
+        <TextInput name="priceMax" source="priceMax" label="Ціна до" alwaysOn sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>,
+        <TextInput name="yearMin" source="yearMin" label="Рік від" alwaysOn sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>,
+        <TextInput name="yearMax" source="yearMax" label="Рік до" alwaysOn sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>,
+        <TextInput name="mileageMin" source="mileageMin" label="Пробіг від" alwaysOn sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>,
+        <TextInput name="mileageMax" source="mileageMax" label="Пробіг до" alwaysOn sx={{minWidth: searchFieldWidth, width: searchFieldWidth}}/>
+
     ];
 
     return (
-        <Card sx={{order: -1, mr: 2, width: 300,}}>
+        <Card sx={{order: -1, mr: 2, width: 260,}}>
             <CardContent>
                 <FilterContext.Provider value={searchFilters}>
                     <FilterForm filters={searchFilters}/>
                 </FilterContext.Provider>
-
-                {/*<SelectInput name="name" source="category" choices={[]} />*/}
-                {/* <ReferenceInput label="Бренд" source="brandId" reference="brands">
-                    <SelectInput optionText="name" />
-                </ReferenceInput> */}
-                <FilterList label="Статус" icon={<CategoryIcon/>}>
-                    <FilterListItem label="На продажу" value={{status: 'ON_SALE'}}/>
-                    <FilterListItem label="Продано" value={{status: 'SOLD'}}/>
-                    <FilterListItem label="Знято з продажу" value={{status: 'CANCELLED'}}/>
-                </FilterList>
                 <FilterList label="ДТП" icon={<CategoryIcon/>}>
                     <FilterListItem label="Був у ДТП" value={{accident: true}}/>
                     <FilterListItem label="Не був у ДТП" value={{accident: false}}/>

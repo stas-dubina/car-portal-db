@@ -43,6 +43,14 @@ import {MyAppBar} from "@/components/appbar/appbar";
 import {GearTypeEdit} from "@/components/gear-types/edit";
 import {FuelTypeEdit} from "@/components/fuel-types/edit";
 import {GearTypeCreate} from "@/components/gear-types/create";
+import {ModelCreate} from "@/components/models/create";
+import {ModelEdit} from "@/components/models/edit";
+import {CarTypeEdit} from "@/components/car-types/edit";
+import {CarTypeCreate} from "@/components/car-types/create";
+import {FuelTypeCreate} from "@/components/fuel-types/create";
+import {ColorEdit} from "@/components/colors/edit";
+import {CityCreate} from "@/components/cities/create";
+import {CityEdit} from "@/components/cities/edit";
 
 
 const AppTheme = {
@@ -90,14 +98,16 @@ const AdminApp = () => (
             name="models"
             list={ModelList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={ModelEdit}
+            create={ModelCreate}
             icon={LibraryBooksIcon}
         />
         <Resource
             name="car-types"
             list={CarTypeList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={CarTypeEdit}
+            create={CarTypeCreate}
             icon={FireTruckIcon}
         />
         <Resource
@@ -113,6 +123,7 @@ const AdminApp = () => (
             list={FuelTypeList}
             show={ShowGuesser}
             edit={FuelTypeEdit}
+            create={FuelTypeCreate}
             icon={LocalGasStationIcon}
         />
         <Resource
@@ -127,7 +138,7 @@ const AdminApp = () => (
             name="colors"
             list={ColorList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={ColorEdit}
             create={ColorCreate}
             icon={PaletteIcon}
         />
@@ -153,7 +164,8 @@ const AdminApp = () => (
             name="cities"
             list={CityList}
             show={ShowGuesser}
-            edit={EditGuesser}
+            edit={CityEdit}
+            create={CityCreate}
             icon={LocationCityIcon}
         />
         <CustomRoutes>

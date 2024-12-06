@@ -4,6 +4,7 @@ export type SearchParams = {
     ids: number[];
     range?: Range;
     filter?: any;
+    sort?: any;
 }
 
 export function SearchParamsParser(request: Request): SearchParams {
@@ -17,5 +18,15 @@ export function SearchParamsParser(request: Request): SearchParams {
     if (filterParam) {
         filter = JSON.parse(filterParam);
     }
-    return {ids, range, filter};
+    const sortParam = searchParams.get('sort');
+    let sort = {};
+    if (sortParam) {
+        const sortParamArray: Array<string> = JSON.parse(sortParam);
+        if (sortParamArray.length > 0) {
+            sort = {
+                [sortParamArray[0]]: sortParamArray[1].toLowerCase()
+            }
+        }
+    }
+    return {ids, range, filter, sort};
 }

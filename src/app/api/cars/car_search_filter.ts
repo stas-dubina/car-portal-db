@@ -4,5 +4,12 @@ export type CarSearchFilter = {
     inCredit?: boolean,
     abroad?: boolean,
     status?: string,
-    userId?: number
+    userId?: number,
+    brandId?: number,
+    priceMin?: number,
+    priceMax?: number,
+    yearMin?: number,
+    yearMax?: number,
+    mileageMin?: number,
+    mileageMax?: number
 }

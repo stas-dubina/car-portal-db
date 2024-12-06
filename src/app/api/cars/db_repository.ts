@@ -1,50 +1,11 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
 import {CarSearchFilter} from "@/app/api/cars/car_search_filter";
-import {CarDriveType, CarStatus, Database} from "@/lib/db/types";
-import {expressionBuilder, Kysely} from "kysely";
+import {Brand, CarDriveType, CarStatus, Database} from "@/lib/db/types";
+import {Expression, expressionBuilder, Kysely, SqlBool} from "kysely";
+import {CarSearchSorter} from "@/app/api/cars/car_search_sorter";
 
-export async function getCount(ids: Array<number>, filter: CarSearchFilter): Promise<number> {
-    const db = await connect();
-
-    let query = db.selectFrom('car')
-        .select(
-            (eb) => eb.fn.count<number>('car_id').as('car_count')
-        );
-
-    if (ids.length > 0) {
-        query = query.where('car_id', 'in', ids.map(Number));
-    }
-
-    if (filter.accident != undefined) {
-        query = query.where('car_accident', '=', filter.accident)
-    }
-
-    if (filter.driveType) {
-        query = query.where('car_drive_type', '=', filter.driveType as CarDriveType)
-    }
-
-    if (filter.inCredit != undefined) {
-        query = query.where('car_in_credit', '=', filter.inCredit)
-    }
-
-    if (filter.abroad != undefined) {
-        query = query.where('car_abroad', '=', filter.abroad)
-    }
-
-    if (filter.status) {
-        query = query.where('car_status', '=', filter.status as CarStatus)
-    }
-
-    if (filter.userId) {
-        query = query.where('car_user_id', '=', filter.userId)
-    }
-
-    const result = await query.executeTakeFirstOrThrow();
-    return result.car_count;
-}
-
-function selectCarView(db: Kysely<Database>) {
+function selectFrom(db: Kysely<Database>) {
     return db.selectFrom('car as c')
         .innerJoin('body_type as bt', 'bt.body_type_id', 'c.car_body_type_id')
         .innerJoin('car_type as ct', 'ct.car_type_id', 'bt.body_car_type_id')
@@ -68,6 +29,11 @@ function selectCarView(db: Kysely<Database>) {
         )
         .leftJoin('image as i', 'i.image_id', 'top_image.image_id')
         .innerJoin('city', 'city.city_id', 'u.user_city_id')
+
+}
+
+function selectCarView(db: Kysely<Database>) {
+    return selectFrom(db)
         .select([
             'c.car_id as id',
             'b.brand_id as brandId',
@@ -111,7 +77,75 @@ function selectCarView(db: Kysely<Database>) {
         ]);
 }
 
-export async function getAll(ids: Array<number>, filter: CarSearchFilter, range?: Range) {
+export async function getCount(ids: Array<number>, filter: CarSearchFilter): Promise<number> {
+    const db = await connect();
+
+    let query = selectFrom(db)
+        .select(
+            (eb) => eb.fn.count<number>('car_id').as('car_count')
+        );
+
+    if (ids.length > 0) {
+        query = query.where('car_id', 'in', ids.map(Number));
+    }
+
+    if (filter.accident != undefined) {
+        query = query.where('car_accident', '=', filter.accident)
+    }
+
+    if (filter.driveType) {
+        query = query.where('car_drive_type', '=', filter.driveType as CarDriveType)
+    }
+
+    if (filter.inCredit != undefined) {
+        query = query.where('car_in_credit', '=', filter.inCredit)
+    }
+
+    if (filter.abroad != undefined) {
+        query = query.where('car_abroad', '=', filter.abroad)
+    }
+
+    if (filter.status) {
+        query = query.where('car_status', '=', filter.status as CarStatus)
+    }
+
+    if (filter.userId) {
+        query = query.where('car_user_id', '=', filter.userId)
+    }
+
+    if (filter.brandId) {
+        query = query.where('brand_id', '=', filter.brandId)
+    }
+
+    if (filter.priceMin) {
+        query = query.where('car_price', '>', filter.priceMin)
+    }
+
+    if (filter.priceMax) {
+        query = query.where('car_price', '<', filter.priceMax)
+    }
+
+    if (filter.yearMin) {
+        query = query.where('car_year', '>=', filter.yearMin)
+    }
+
+    if (filter.yearMax) {
+        query = query.where('car_year', '<=', filter.yearMax)
+    }
+
+    if (filter.mileageMin) {
+        query = query.where('car_mileage', '>=', filter.mileageMin)
+    }
+
+    if (filter.mileageMax) {
+        query = query.where('car_mileage', '<=', filter.mileageMax)
+    }
+
+    const result = await query.executeTakeFirstOrThrow();
+    return result.car_count;
+}
+
+export async function getAll(ids: Array<number>, filter: CarSearchFilter, sort: CarSearchSorter, range?: Range) {
     const db = await connect();
     /*
     select * from car left join
@@ -146,6 +180,46 @@ export async function getAll(ids: Array<number>, filter: CarSearchFilter, range?
 
     if (filter.userId) {
         query = query.where('car_user_id', '=', filter.userId)
+    }
+
+    if (filter.brandId) {
+        query = query.where('brand_id', '=', filter.brandId)
+    }
+
+    if (filter.priceMin) {
+        query = query.where('car_price', '>=', filter.priceMin)
+    }
+
+    if (filter.priceMax) {
+        query = query.where('car_price', '<=', filter.priceMax)
+    }
+
+    if (filter.yearMin) {
+        query = query.where('car_year', '>=', filter.yearMin)
+    }
+
+    if (filter.yearMax) {
+        query = query.where('car_year', '<=', filter.yearMax)
+    }
+
+    if (filter.mileageMin) {
+        query = query.where('car_mileage', '>=', filter.mileageMin)
+    }
+
+    if (filter.mileageMax) {
+        query = query.where('car_mileage', '<=', filter.mileageMax)
+    }
+
+    if (sort.mileage) {
+        query = query.orderBy('car_mileage', sort.mileage)
+    }
+
+    if (sort.year) {
+        query = query.orderBy('car_year', sort.year)
+    }
+
+    if (sort.price) {
+        query = query.orderBy('car_price', sort.price)
     }
 
     if (range) {

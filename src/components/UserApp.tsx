@@ -31,8 +31,8 @@ const AppTheme = {
 
 export const MyMenu = () => (
     <Menu>
-        <Menu.DashboardItem primaryText="Search"/>
-        <Menu.Item to="/cars" primaryText="My Cars" leftIcon={<CollectionsBookmarkIcon/>}/>
+        <Menu.DashboardItem primaryText="Пошук"/>
+        <Menu.Item to="/cars" primaryText="Мої авто" leftIcon={<CollectionsBookmarkIcon/>}/>
     </Menu>
 );
 
@@ -62,9 +62,6 @@ const UserApp = () => (
             <Route path=":carId/images" element={<ImagesList/>}/>
             <Route path=":carId/images/create" element={<CreateImage/>}/>
         </Resource>
-        {/*<CustomRoutes>
-            <Route path="/cars" element={<MyCarsList/>}/>
-        </CustomRoutes>*/}
     </Admin>
 );
 
