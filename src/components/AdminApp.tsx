@@ -11,7 +11,7 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import PeopleIcon from '@mui/icons-material/People';
 import FireTruckIcon from '@mui/icons-material/FireTruck';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
-import simpleRestProvider from "ra-data-simple-rest";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import {CarList} from "@/components/cars/list";
 import {CarShow} from "@/components/cars/details";
 import {BrandList} from "@/components/brands/list";
@@ -37,7 +37,6 @@ import {CarEdit} from "@/components/cars/edit";
 import {ImagesList} from "@/components/images/list";
 import {CreateImage} from "@/components/images/create";
 import {dataProvider} from "@/components/dataprovider";
-import {CarSearchList} from "@/components/search/car_search_list";
 import {authProvider} from "@/components/authprovider";
 import {MyAppBar} from "@/components/appbar/appbar";
 import {GearTypeEdit} from "@/components/gear-types/edit";
@@ -53,6 +52,7 @@ import {CityCreate} from "@/components/cities/create";
 import {CityEdit} from "@/components/cities/edit";
 import {SalesByBrandStatistics} from "@/components/statistics/sales_by_brand";
 import {MileageByBrandStatistics} from "@/components/statistics/mileage_by_brand";
+import {OrderList} from "@/components/orders/list";
 
 
 const AppTheme = {
@@ -152,6 +152,14 @@ const AdminApp = () => (
             icon={PeopleIcon}
         />
         <Resource
+            name="cities"
+            list={CityList}
+            show={ShowGuesser}
+            edit={CityEdit}
+            create={CityCreate}
+            icon={LocationCityIcon}
+        />
+        <Resource
             name="cars"
             list={CarList}
             show={CarShow}
@@ -163,13 +171,11 @@ const AdminApp = () => (
             <Route path=":carId/images/create" element={<CreateImage/>}/>
         </Resource>
         <Resource
-            name="cities"
-            list={CityList}
-            show={ShowGuesser}
-            edit={CityEdit}
-            create={CityCreate}
-            icon={LocationCityIcon}
+            name="orders"
+            list={OrderList}
+            icon={MonetizationOnIcon}
         />
+
         <CustomRoutes>
             <Route path="/statistics" element={<StatisticsList/>}/>
             <Route path="/statistics/on-sale" element={<OnSaleStatistics/>}/>

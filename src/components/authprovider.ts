@@ -34,15 +34,17 @@ export const authProvider: AuthProvider = {
         const resp = await fetch("/api/auth/login", {
             method: "POST",
             // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-            body: JSON.stringify({ login: username, password }),
+            body: JSON.stringify({login: username, password}),
         })
 
         if (resp.status !== 200) {
             throw new Error(resp.statusText);
         }
 
-        const user: LoginResponse = await resp.json();
-        localStorage.setItem(AUTH_KEY, JSON.stringify(user));
+        const data: LoginResponse = await resp.json();
+        data.user.fullName = `${data.user.firstName} ${data.user.lastName}`
+
+        localStorage.setItem(AUTH_KEY, JSON.stringify(data));
     },
     logout(params: any): Promise<void | false | string> {
         localStorage.removeItem(AUTH_KEY)

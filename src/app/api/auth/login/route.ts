@@ -14,14 +14,9 @@ export type LoginResponse = {
     token: string;
 }
 
-export async function POST(request: Request) {
-    const {login, password}: LoginRequest = await request.json();
-    const hashedPassword = await bcrypt.hash(password, 10)
-    console.log(login, password)
+export async function singIn(login: string, password: string) {
     const user = await getUser(login)
-
     const passwordMatches = await bcrypt.compare(password, user.user_password_hash)
-
     if (passwordMatches) {
         return NextResponse.json({
                 user: {
@@ -46,4 +41,9 @@ export async function POST(request: Request) {
     } else {
         return NextResponse.json({error: 'Користувача не знайдено'}, {status: 403})
     }
+}
+
+export async function POST(request: Request) {
+    const {login, password}: LoginRequest = await request.json();
+    return await singIn(login, password)
 }

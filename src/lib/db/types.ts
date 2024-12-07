@@ -91,6 +91,24 @@ export interface OrderTable {
     order_created_at: Date
 }
 
+export interface OrderView {
+    order_id: number
+    order_car_id: number
+    order_price: number
+    order_created_at: Date
+    brand_name: string,
+    model_name: string,
+    car_year: number,
+    car_mileage: number,
+    car_price: number,
+    user_id: number,
+    user_first_name: string,
+    user_last_name: string,
+    user_phone: string,
+    city_id: number,
+    city_name: string
+}
+
 export interface BrandTable {
     brand_id: Generated<number>
     brand_name: string

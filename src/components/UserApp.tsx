@@ -1,5 +1,5 @@
 "use client";
-import {Admin, CustomRoutes, defaultDarkTheme, Layout, Menu, Resource} from "react-admin";
+import {Admin, defaultDarkTheme, Layout, Menu, Resource} from "react-admin";
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark';
 import {Route} from "react-router";
 import {dataProvider} from "@/components/dataprovider";
@@ -7,13 +7,13 @@ import {CarSearchList} from "@/components/search/car_search_list";
 import {authProvider} from "@/components/authprovider";
 import {MyAppBar} from "@/components/appbar/appbar";
 import {MyCarsList} from "@/components/user/my-cars";
-import {CarList} from "@/components/cars/list";
 import {CarShow} from "@/components/cars/details";
 import {CarEdit} from "@/components/cars/edit";
 import {CarCreate} from "@/components/cars/create";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import {ImagesList} from "@/components/images/list";
 import {CreateImage} from "@/components/images/create";
+import {SignInForm} from "@/components/auth/signin";
 
 
 const AppTheme = {
@@ -50,6 +50,7 @@ const UserApp = () => (
         authProvider={authProvider}
         layout={MyLayout}
         dashboard={CarSearchList}
+        loginPage={SignInForm}
     >
         <Resource
             name="cars"
