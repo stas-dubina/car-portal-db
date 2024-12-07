@@ -10,6 +10,12 @@ export const StatisticsList = () => (
             <Link component={RouterLink} to="/statistics/sales">
                 Кількість проданих автомобілів за період
             </Link>
+            <Link component={RouterLink} to="/statistics/sales-by-brand">
+                Кількість проданих автомобілів за брендом
+            </Link>
+            <Link component={RouterLink} to="/statistics/mileage-by-brand">
+                Кількість автомобілів за пробiгом
+            </Link>
         </Stack>
     </Card>
 );

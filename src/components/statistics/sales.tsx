@@ -2,7 +2,7 @@ import {
     DateInput,
     fetchUtils,
     Form,
-    Loading,
+    Loading, NumberField,
     RecordContextProvider,
     SaveButton,
     SimpleShowLayout,
@@ -12,6 +12,7 @@ import {
 import {Card, Stack} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
 import React, {useEffect, useState} from "react";
+import {NUMBER_FIELD_OPTIONS} from "@/components/statistics/utils";
 
 export const SalesStatistics = () => {
 
@@ -46,7 +47,8 @@ export const SalesStatistics = () => {
                 <Card sx={{m: 2}}>
                     <SimpleShowLayout>
                         <TextField source="order_count" label="Кількість проданих автомобілів"/>
-                        <TextField source="order_price_sum" label="Сума проданих автомобілів"/>
+                        <NumberField source="order_price_sum" label="Загальна вартiсть проданих автомобілів" options={NUMBER_FIELD_OPTIONS} />
+                        <NumberField source="order_price_avg" label="Середня вартiсть проданих автомобілів" options={NUMBER_FIELD_OPTIONS} />
                     </SimpleShowLayout>
                 </Card>
             </RecordContextProvider>

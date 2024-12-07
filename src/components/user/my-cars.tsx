@@ -7,8 +7,8 @@ export const MyCarsList = () => {
     const { data, isPending, error } = useGetIdentity();
 
     return (
-        <List resource="/cars" title="My Cars" actions={false} sx={{mt: 2}} filter={{userId: data!.id}}>
-            <CarList/>
+        <List resource="/cars" title="Мої авто" actions={false} sx={{mt: 2}} filter={{userId: data!.id}}>
+            <CarList showStatus={true}/>
         </List>
     );
 }

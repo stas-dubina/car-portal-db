@@ -51,6 +51,8 @@ import {FuelTypeCreate} from "@/components/fuel-types/create";
 import {ColorEdit} from "@/components/colors/edit";
 import {CityCreate} from "@/components/cities/create";
 import {CityEdit} from "@/components/cities/edit";
+import {SalesByBrandStatistics} from "@/components/statistics/sales_by_brand";
+import {MileageByBrandStatistics} from "@/components/statistics/mileage_by_brand";
 
 
 const AppTheme = {
@@ -172,6 +174,8 @@ const AdminApp = () => (
             <Route path="/statistics" element={<StatisticsList/>}/>
             <Route path="/statistics/on-sale" element={<OnSaleStatistics/>}/>
             <Route path="/statistics/sales" element={<SalesStatistics/>}/>
+            <Route path="/statistics/sales-by-brand" element={<SalesByBrandStatistics/>}/>
+            <Route path="/statistics/mileage-by-brand" element={<MileageByBrandStatistics/>}/>
         </CustomRoutes>
     </Admin>
 );

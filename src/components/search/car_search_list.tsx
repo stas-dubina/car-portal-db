@@ -17,7 +17,7 @@ export const CarSearchList = () => {
               actions={<ListActions/>}
               sx={{mt: 2}}
         >
-            <CarList/>
+            <CarList showStatus={false}/>
         </List>
     );
 }

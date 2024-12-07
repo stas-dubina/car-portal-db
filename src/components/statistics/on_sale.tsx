@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {fetchUtils, Loading, RecordContextProvider, SimpleShowLayout, TextField, Title} from "react-admin";
+import {fetchUtils, Loading, NumberField, RecordContextProvider, SimpleShowLayout, TextField, Title} from "react-admin";
 import {Card} from "@mui/material";
+import {NUMBER_FIELD_OPTIONS} from "@/components/statistics/utils";
 
 export const OnSaleStatistics = () => {
 
@@ -21,7 +22,8 @@ export const OnSaleStatistics = () => {
             <Card sx={{m: 2}}>
                 <SimpleShowLayout>
                     <TextField source="car_count" label="Кількість активних угод"/>
-                    <TextField source="car_price_sum" label="Сума вартості автомобілів"/>
+                    <NumberField source="car_price_sum" label="Загальна вартiсть автомобілів на продажу" options={NUMBER_FIELD_OPTIONS} />
+                    <NumberField source="car_price_avg" label="Середня вартiсть автомобілів на продажу" options={NUMBER_FIELD_OPTIONS} />
                 </SimpleShowLayout>
             </Card>
         </RecordContextProvider>

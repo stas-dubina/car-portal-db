@@ -1,14 +1,19 @@
 import {useParams} from 'react-router-dom';
 import {
-    BooleanField, CreateButton,
-    DateField, EditButton,
+    BooleanField,
+    CreateButton,
+    DateField,
+    EditButton,
     Labeled,
     List,
     Loading,
     NumberField,
     RecordContextProvider,
     SelectField,
-    TextField, TopToolbar,
+    TextField,
+    Title,
+    TopToolbar,
+    useGetIdentity,
     useGetOne,
     useListContext,
     useRedirect
@@ -16,6 +21,7 @@ import {
 import React from "react";
 import {DRIVE_TYPES} from "@/components/cars/types";
 import {Box, Card, CardContent, CardMedia, Grid, ImageList, ImageListItem, Typography} from "@mui/material";
+import {ActionButtons} from "@/components/cars/car_action_buttons";
 
 // @ts-ignore
 export const CarImage = ({image}) => {
@@ -67,16 +73,24 @@ export const SectionCard = ({title, children}: { title: string, children: any })
 export const VehicleDetails = ({car}) => (
     <SectionCard title="Загальна інформація">
         <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={3}><Labeled><TextField source="brandName" label="Марка"/></Labeled></Grid>
-            <Grid item xs={12} sm={6} md={3}><Labeled><TextField source="modelName"
-                                                                 label="Модель"/></Labeled></Grid>
-            <Grid item xs={12} sm={6} md={3}><Labeled><TextField source="year" label="Рік"/></Labeled></Grid>
-            <Grid item xs={12} sm={6} md={3}><Labeled><TextField source="fuelTypeName"
-                                                                 label="Тип палива"/></Labeled></Grid>
-            <Grid item xs={12} sm={6} md={3}><Labeled><TextField source="gearTypeName"
-                                                                 label="Коробка передач"/></Labeled></Grid>
-            <Grid item xs={12} sm={6} md={3}><Labeled><NumberField source="mileage"
-                                                                   label="Пробіг"/></Labeled></Grid>
+            <Grid item xs={12} sm={6} md={3}>
+                <Labeled><TextField source="brandName" label="Марка"/></Labeled>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+                <Labeled><TextField source="modelName" label="Модель"/></Labeled>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+                <Labeled><TextField source="year" label="Рік"/></Labeled>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+                <Labeled><TextField source="fuelTypeName" label="Тип палива"/></Labeled>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+                <Labeled><TextField source="gearTypeName" label="Коробка передач"/></Labeled>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+                <Labeled><NumberField source="mileage" label="Пробіг"/></Labeled>
+            </Grid>
             <Grid item xs={12} sm={6} md={3}>
                 <Labeled>
                     <NumberField
@@ -153,18 +167,19 @@ export const StatusDetails = ({car}) => (
 
 const Actions = () => (
     <TopToolbar>
-        <EditButton />
+        <EditButton/>
     </TopToolbar>
 );
 
 const ImagesActions = () => (
     <TopToolbar>
-        <CreateButton />
+        <CreateButton/>
     </TopToolbar>
 );
 
 export const CarShow = () => {
     const {id} = useParams();
+    const {data: userData} = useGetIdentity();
     const redirect = useRedirect();
     const {data, isPending} = useGetOne(
         'cars',
@@ -177,20 +192,24 @@ export const CarShow = () => {
     }
 
     return (
-        <Box sx={{display: 'flex', flexDirection: 'row'}}>
-            <RecordContextProvider value={data}>
-                <Box sx={{mr: 2}}>
-                    <Actions/>
-                    <VehicleDetails car={data}/>
-                    <OwnerDetails car={data}/>
-                    <TechnicalDetails car={data}/>
-                    <StatusDetails car={data}/>
-                </Box>
-            </RecordContextProvider>
+        <>
+            <Title title={`${data.brandName} ${data.modelName} ${data.year}`}/>
+            <Box sx={{display: 'flex', flexDirection: 'row'}}>
+                <RecordContextProvider value={data}>
+                    <Box sx={{mr: 2}}>
+                        <Actions/>
+                        <VehicleDetails car={data}/>
+                        <OwnerDetails car={data}/>
+                        <TechnicalDetails car={data}/>
+                        <StatusDetails car={data}/>
+                        {data.userId == userData!.id && <ActionButtons/>}
+                    </Box>
+                </RecordContextProvider>
 
-            <List resource={`cars/${id}/images`} actions={<ImagesActions/>}>
-                <CarImages/>
-            </List>
-        </Box>
+                <List resource={`cars/${id}/images`} actions={<ImagesActions/>} title={false}>
+                    <CarImages/>
+                </List>
+            </Box>
+        </>
     );
 };

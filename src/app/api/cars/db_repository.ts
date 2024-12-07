@@ -210,6 +210,8 @@ export async function getAll(ids: Array<number>, filter: CarSearchFilter, sort: 
         query = query.where('car_mileage', '<=', filter.mileageMax)
     }
 
+    query = query.orderBy('car_status', 'asc')
+
     if (sort.mileage) {
         query = query.orderBy('car_mileage', sort.mileage)
     }
