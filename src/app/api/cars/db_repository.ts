@@ -1,8 +1,8 @@
 import {connect} from "@/lib/db/connection";
 import {Range} from "@/lib/range";
 import {CarSearchFilter} from "@/app/api/cars/car_search_filter";
-import {Brand, CarDriveType, CarStatus, Database} from "@/lib/db/types";
-import {Expression, expressionBuilder, Kysely, SqlBool} from "kysely";
+import {CarDriveType, CarStatus, Database, NewCar, UpdateCar} from "@/lib/db/types";
+import {Kysely} from "kysely";
 import {CarSearchSorter} from "@/app/api/cars/car_search_sorter";
 
 function selectFrom(db: Kysely<Database>) {
@@ -29,7 +29,6 @@ function selectFrom(db: Kysely<Database>) {
         )
         .leftJoin('image as i', 'i.image_id', 'top_image.image_id')
         .innerJoin('city', 'city.city_id', 'u.user_city_id')
-
 }
 
 function selectCarView(db: Kysely<Database>) {
@@ -234,9 +233,60 @@ export async function getAll(ids: Array<number>, filter: CarSearchFilter, sort: 
 
 export async function getById(id: number) {
     const db = await connect();
-    return await selectCarView(db)
-        .where('car_id', '=', id)
-        .executeTakeFirst();
+    const result = await selectFrom(db)
+        .leftJoin('car_feature', 'car_feature.car_id', 'c.car_id')
+        .select([
+            'c.car_id as id',
+            'b.brand_id as brandId',
+            'b.brand_name as brandName',
+            'm.model_id as modelId',
+            'm.model_name as modelName',
+            'c.car_year as year',
+            'ft.fuel_type_id as fuelTypeId',
+            'ft.fuel_type_name as fuelTypeName',
+            'gt.gear_type_id as gearTypeId',
+            'gt.gear_type_name as gearTypeName',
+            'c.car_mileage as mileage',
+            'c.car_price as price',
+            'u.user_id as userId',
+            'u.user_first_name as firstName',
+            'u.user_last_name as lastName',
+            'u.user_phone as phone',
+            'u.user_email as email',
+            'c.car_status as status',
+            'co.color_id as colorId',
+            'co.color_name as colorName',
+            'co.color_value as colorValue',
+            'c.car_created_at as createdAt',
+            'c.car_vin as vin',
+            'c.car_description as description',
+            'bt.body_type_id as bodyTypeId',
+            'bt.body_type_name as bodyTypeName',
+            'ct.car_type_id as carTypeId',
+            'ct.car_type_name as carTypeName',
+            'c.car_accident as accident',
+            'c.car_abroad as abroad',
+            'c.car_owner_number as ownerNumber',
+            'c.car_in_credit as inCredit',
+            'c.car_power as power',
+            'c.car_seat as seat',
+            'c.car_drive_type as driveType',
+            'i.image_id as imageId',
+            'i.image_file as imageFile',
+            'city.city_id as cityId',
+            'city.city_name as cityName',
+            'car_feature.feature_id as featureId'
+        ])
+        .where('c.car_id', '=', id)
+        .execute();
+
+    if (result.length === 0) {
+        return Promise.reject()
+    }
+    return {
+        ...result[0],
+        featureIds: result.map(r => r.featureId)
+    }
 }
 
 export async function updateCarStatus(id: number, carStatus: CarStatus) {
@@ -275,10 +325,88 @@ export async function soldCar(id: number, price: number) {
     // })
 }
 
+export async function insert(e: NewCar): Promise<number> {
+    const db = await connect();
+    const result = await db.insertInto('car')
+        .values({
+            car_model_id: e.car_model_id,
+            car_year: e.car_year,
+            car_fuel_type_id: e.car_fuel_type_id,
+            car_gear_type_id: e.car_gear_type_id,
+            car_mileage: e.car_mileage,
+            car_price: e.car_price,
+            car_user_id: e.car_user_id,
+            car_status: e.car_status,
+            car_color_id: e.car_color_id,
+            car_created_at: e.car_created_at,
+            car_vin: e.car_vin,
+            car_description: e.car_description,
+            car_body_type_id: e.car_body_type_id,
+            car_accident: e.car_accident,
+            car_abroad: e.car_abroad,
+            car_owner_number: e.car_owner_number,
+            car_in_credit: e.car_in_credit,
+            car_power: e.car_power,
+            car_seat: e.car_seat,
+            car_drive_type: e.car_drive_type
+        })
+        .returning(['car_id'])
+        .executeTakeFirstOrThrow()
+    return result.car_id
+}
+
+export async function update(e: UpdateCar): Promise<boolean> {
+    const db = await connect();
+    const result = await db.updateTable('car')
+        .set({
+            car_model_id: e.car_model_id,
+            car_year: e.car_year,
+            car_fuel_type_id: e.car_fuel_type_id,
+            car_gear_type_id: e.car_gear_type_id,
+            car_mileage: e.car_mileage,
+            car_price: e.car_price,
+            car_status: e.car_status,
+            car_color_id: e.car_color_id,
+            car_created_at: e.car_created_at,
+            car_description: e.car_description,
+            car_body_type_id: e.car_body_type_id,
+            car_accident: e.car_accident,
+            car_abroad: e.car_abroad,
+            car_owner_number: e.car_owner_number,
+            car_in_credit: e.car_in_credit,
+            car_power: e.car_power,
+            car_seat: e.car_seat,
+            car_drive_type: e.car_drive_type
+        })
+        .where('car_id', '=', e.car_id!)
+        .executeTakeFirstOrThrow();
+    return result.numUpdatedRows != BigInt(0)
+}
+
+export async function updateFeatures(car_id: number, feature_ids: Array<number>) {
+    const db = await connect();
+    await db.deleteFrom("car_feature")
+        .where('car_id', '=', car_id)
+        .executeTakeFirstOrThrow()
+
+    const features = feature_ids.map((fId,) => {
+        return {
+            car_id: car_id,
+            feature_id: fId
+        }
+    })
+    await db.insertInto("car_feature")
+        .values(features)
+        .executeTakeFirstOrThrow()
+}
+
 export default {
     getById,
     getCount,
     getAll,
     cancelCar,
-    soldCar
+    soldCar,
+    insert,
+    update,
+    updateFeatures
 }

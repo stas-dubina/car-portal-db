@@ -7,7 +7,7 @@ export type CarTypeDto = {
     name: string;
 }
 
-class ColorMapper implements Mapper<CarType, CarTypeDto> {
+class CarTypeMapper implements Mapper<CarType, CarTypeDto> {
     toDto(e: CarType): CarTypeDto {
         return {
             id: e.car_type_id,
@@ -30,4 +30,4 @@ class ColorMapper implements Mapper<CarType, CarTypeDto> {
     }
 }
 
-export default new CrudRepository<CarType, CarTypeDto>(dbRepository, new ColorMapper());
+export default new CrudRepository<CarType, CarTypeDto>(dbRepository, new CarTypeMapper());

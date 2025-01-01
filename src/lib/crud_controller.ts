@@ -18,7 +18,6 @@ export default class CrudController<E, T> {
 
     public async getAll(request: Request) {
         const searchParams = SearchParamsParser(request);
-
         const result = await this.repository.findAll(searchParams.ids, searchParams.range, searchParams.filter);
 
         return NextResponse.json(
@@ -64,10 +63,10 @@ export default class CrudController<E, T> {
         const updated = await this.repository.update(update)
 
         if (!updated) {
-            return NextResponse.json({ error: 'Запис не знайдено' }, { status: 404 });
+            return NextResponse.json({error: 'Запис не знайдено'}, {status: 404});
         }
 
         const result = await this.repository.findById(id);
-        return NextResponse.json(result, { status: 200 });
+        return NextResponse.json(result, {status: 200});
     }
 }

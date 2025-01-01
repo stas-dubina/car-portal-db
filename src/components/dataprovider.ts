@@ -1,9 +1,21 @@
 import simpleRestProvider from "ra-data-simple-rest";
 import {CreateParams, DataProvider} from "ra-core";
 import {fetchUtils} from "react-admin";
+import {getToken} from "@/components/authprovider";
 
 const endpoint = "http://localhost:3000/api";
-const baseDataProvider = simpleRestProvider(endpoint);
+
+const httpClient = (url: any, options: any = {}) => {
+    if (!options.headers) {
+        options.headers = new Headers({Accept: 'application/json'});
+    }
+    const token = getToken();
+    if (token) {
+        options.headers.set('Authorization', `Bearer ${token}`);
+    }
+    return fetchUtils.fetchJson(url, options);
+}
+const baseDataProvider = simpleRestProvider(endpoint, httpClient);
 
 
 const createPostFormData = (

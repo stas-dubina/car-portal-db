@@ -1,10 +1,10 @@
 import {Create, SimpleForm, TextInput} from "react-admin";
 import React from "react";
 
-export const CityCreate = () => (
+export const FeatureCreate = () => (
     <Create>
         <SimpleForm>
-            <TextInput source="name" label="Назва мiста" required={true} />
+            <TextInput source="name" label="Назва опції" required={true} />
         </SimpleForm>
     </Create>
 );

@@ -23,7 +23,6 @@ export const SignInForm = () => {
     const signIn = async (data) => {
         try {
             const result = await login({username: data.login, password: data.password})
-            console.log(result)
             redirect("/")
         } catch (err) {
             notify("Помилка, спробуйте ще раз", {type: 'error'})

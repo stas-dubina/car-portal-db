@@ -1,4 +1,5 @@
 import {
+    AutocompleteArrayInput,
     Button,
     Edit,
     Form,
@@ -9,20 +10,17 @@ import {
     SaveButton,
     SelectInput,
     ShowButton,
-    TextInput,
+    TextInput, Title,
     TopToolbar
 } from "react-admin";
 import React from "react";
 import {Grid} from "@mui/material";
-import {DRIVE_TYPES} from "@/components/cars/types";
-import {useWatch} from "react-hook-form";
+import {BOOLEAN_RADIO_VALUES, DRIVE_TYPES} from "./types";
 import {useParams} from "react-router-dom";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
-
-const BOOLEAN_RADIO_VALUES = [
-    {id: 'true', name: 'Так'},
-    {id: 'false', name: 'Нi'},
-]
+import {ModelInput} from "./input_model";
+import {BodyTypeInput} from "./input_body_type";
+import ReferenceManyToManyInput from './input_many_to_many';
 
 const EditActions = () => {
     const {id} = useParams();
@@ -40,25 +38,18 @@ const EditActions = () => {
     );
 }
 
-const ModelInput = () => {
-    const brandId = useWatch({name: 'brandId'});
-
-    return <ReferenceInput source="modelId" reference="models" filter={{brandId: Number(brandId)}}>
-        <SelectInput name="modelId" source="modelId" required={true} disabled={!brandId}/>
-    </ReferenceInput>
-}
-
 export const CarEdit = () => {
+    const {id} = useParams();
     return (
-        <Edit actions={<EditActions/>} mutationMode="pessimistic">
+        <Edit actions={<EditActions/>} mutationMode="pessimistic" title={`Автомобіль №${id}`}>
             <Form>
                 <Grid container sx={{m: 2}}>
                     <Grid item xs={3}>
                         <ReferenceInput
                             source="brandId"
-                            reference="brands"
-                            required={true}
-                        />
+                            reference="brands">
+                            <SelectInput label="Бренд" required={true}/>
+                        </ReferenceInput>
                         <ModelInput/>
                     </Grid>
                     <Grid item xs={9}>
@@ -69,14 +60,14 @@ export const CarEdit = () => {
                     <Grid item xs={9}>
                     </Grid>
                     <Grid item xs={3}>
-                        <ReferenceInput source="fuelTypeName" reference="fuel-types">
+                        <ReferenceInput source="fuelTypeId" reference="fuel-types">
                             <SelectInput label="Тип палива" required={true}/>
                         </ReferenceInput>
                     </Grid>
                     <Grid item xs={9}>
                     </Grid>
                     <Grid item xs={3}>
-                        <ReferenceInput source="gearTypeName" reference="gear-types">
+                        <ReferenceInput source="gearTypeId" reference="gear-types">
                             <SelectInput label="Коробка передач" required={true}/>
                         </ReferenceInput>
                     </Grid>
@@ -100,14 +91,18 @@ export const CarEdit = () => {
                     <Grid item xs={9}>
                     </Grid>
                     <Grid item xs={3}>
-                        <TextInput source="vin" label="VIN-код" required={true}/>
+                        <TextInput source="vin" label="VIN-код" required={true} disabled={true}/>
                     </Grid>
                     <Grid item xs={9}>
                     </Grid>
                     <Grid item xs={3}>
-                        <ReferenceInput source="bodyTypeId" reference="body-types">
-                            <SelectInput label="Тип кузова" required={true}/>
+                        <ReferenceInput
+                            source="carTypeId"
+                            reference="car-types"
+                        >
+                            <SelectInput label="Тип авто" required={true}/>
                         </ReferenceInput>
+                        <BodyTypeInput/>
                     </Grid>
                     <Grid item xs={9}>
                     </Grid>
@@ -158,7 +153,14 @@ export const CarEdit = () => {
                     </Grid>
                     <Grid item xs={9}>
                     </Grid>
-
+                    <Grid item xs={3}>
+                        <ReferenceManyToManyInput
+                            source="featureIds"
+                            reference="features"
+                        />
+                    </Grid>
+                    <Grid item xs={9}>
+                    </Grid>
                     <Grid item xs={12}>
                         <SaveButton/>
                     </Grid>

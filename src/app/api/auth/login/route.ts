@@ -31,7 +31,7 @@ export async function singIn(login: string, password: string) {
                     cityName: user.user_city_name
                 },
                 token: sign(
-                    {sub: user.user_id.toString(), email: user.user_email},
+                    {sub: user.user_id.toString(), userId: user.user_id, email: user.user_email},
                     process.env.JWT_SECRET!,
                 ),
             },

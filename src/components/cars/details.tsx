@@ -16,7 +16,8 @@ import {
     useGetIdentity,
     useGetOne,
     useListContext,
-    useRedirect
+    useRedirect,
+    ReferenceArrayField
 } from 'react-admin';
 import React from "react";
 import {DRIVE_TYPES} from "@/components/cars/types";
@@ -156,11 +157,21 @@ export const TechnicalDetails = ({car}) => (
 // @ts-ignore
 export const StatusDetails = ({car}) => (
     <SectionCard title="Статус">
-        <Labeled><SelectField source="status" choices={[
-            {id: 'ON_SALE', name: 'ON_SALE'},
-            {id: 'SOLD', name: 'SOLD'},
-            {id: 'CANCELLED', name: 'CANCELLED'},
-        ]} label="Статус"/>
+        <Labeled>
+            <SelectField source="status" choices={[
+                {id: 'ON_SALE', name: 'ON_SALE'},
+                {id: 'SOLD', name: 'SOLD'},
+                {id: 'CANCELLED', name: 'CANCELLED'},
+            ]} label="Статус"/>
+        </Labeled>
+    </SectionCard>
+);
+
+// @ts-ignore
+export const FeaturesList = () => (
+    <SectionCard title="Опцiї">
+        <Labeled>
+            <ReferenceArrayField reference="features" source="featureIds" label='Опцiї'/>
         </Labeled>
     </SectionCard>
 );
@@ -202,6 +213,7 @@ export const CarShow = () => {
                         <OwnerDetails car={data}/>
                         <TechnicalDetails car={data}/>
                         <StatusDetails car={data}/>
+                        <FeaturesList/>
                         {data.userId == userData!.id && <ActionButtons/>}
                     </Box>
                 </RecordContextProvider>

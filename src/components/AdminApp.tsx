@@ -9,6 +9,7 @@ import LocalGasStationIcon from '@mui/icons-material/LocalGasStation';
 import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import PaletteIcon from '@mui/icons-material/Palette';
 import PeopleIcon from '@mui/icons-material/People';
+import ListIcon from '@mui/icons-material/List';
 import FireTruckIcon from '@mui/icons-material/FireTruck';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
@@ -53,6 +54,9 @@ import {CityEdit} from "@/components/cities/edit";
 import {SalesByBrandStatistics} from "@/components/statistics/sales_by_brand";
 import {MileageByBrandStatistics} from "@/components/statistics/mileage_by_brand";
 import {OrderList} from "@/components/orders/list";
+import {FeatureList} from "@/components/features/list";
+import {FeatureEdit} from "@/components/features/edit";
+import {FeatureCreate} from "@/components/features/create";
 
 
 const AppTheme = {
@@ -170,6 +174,14 @@ const AdminApp = () => (
             <Route path=":carId/images" element={<ImagesList/>}/>
             <Route path=":carId/images/create" element={<CreateImage/>}/>
         </Resource>
+        <Resource
+            name="features"
+            list={FeatureList}
+            show={ShowGuesser}
+            edit={FeatureEdit}
+            create={FeatureCreate}
+            icon={ListIcon}
+        />
         <Resource
             name="orders"
             list={OrderList}

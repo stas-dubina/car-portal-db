@@ -1,6 +1,5 @@
 import {createKysely} from "@vercel/postgres-kysely";
 import {Database} from "@/lib/db/types";
-import {seed} from "@/lib/db/seed";
 import {Kysely} from "kysely";
 
 

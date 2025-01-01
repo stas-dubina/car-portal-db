@@ -3,6 +3,15 @@ import {LoginResponse} from "@/app/api/auth/login/route";
 
 const AUTH_KEY = "auth";
 
+export const getToken = () => {
+    const auth = localStorage.getItem(AUTH_KEY);
+    if (auth) {
+        const {token}: LoginResponse = JSON.parse(auth!);
+        return token
+    }
+    return undefined
+}
+
 export const authProvider: AuthProvider = {
     checkAuth(params: any): Promise<void> {
         return localStorage.getItem(AUTH_KEY) ? Promise.resolve() : Promise.reject()

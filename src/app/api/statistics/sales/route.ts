@@ -8,8 +8,6 @@ export async function GET(request: Request) {
     const from = new Date(searchParams.get('from'));
     const to = new Date(searchParams.get('to'));
 
-    console.log('from', searchParams.get('from'), from, 'to', searchParams.get('to'), to)
-
     const result = await getSalesByDate(from, to);
     return NextResponse.json(result, {status: 200});
 }
