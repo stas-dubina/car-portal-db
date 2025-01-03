@@ -1,6 +1,6 @@
 import {Datagrid, List, NumberField, TextField} from 'react-admin';
 import React from "react";
-import {NUMBER_FIELD_OPTIONS} from "@/components/statistics/utils";
+import {NUMBER_FIELD_OPTIONS} from "./utils";
 
 export const SalesByBrandStatistics = () => {
     return (

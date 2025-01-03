@@ -1,7 +1,10 @@
 import {connect} from "@/lib/db/connection";
 
 export async function getOnSaleStatistic() {
-    // select COUNT(car_id), SUM(car_price) from car c where c.car_status = 'ON_SALE'
+    /*
+    select COUNT(car_id) SUM(car_price) from car c
+    where c.car_status = 'ON_SALE'
+    */
     const db = await connect();
     return db.selectFrom('car')
         .select(builder => [

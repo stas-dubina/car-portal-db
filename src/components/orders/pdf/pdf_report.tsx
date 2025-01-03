@@ -1,5 +1,5 @@
 import React from 'react';
-import {Document, Font, Page, StyleSheet} from '@react-pdf/renderer';
+import {Document, Font, Page, StyleSheet, Text, View} from '@react-pdf/renderer';
 import OrdersTable from "./pdf_table";
 
 Font.register({
@@ -35,17 +35,29 @@ const styles = StyleSheet.create({
         lineHeight: 1.5,
         flexDirection: 'column',
     },
-    logo: {
-        width: 74,
-        height: 66,
-        marginLeft: 'auto',
-        marginRight: 'auto'
+    titleContainer: {
+
+    },
+    title: {
+        fontWeight: 600,
+        textAlign: 'center',
+        paddingLeft: 5,
+        paddingRight: 5,
+    },
+    createdAt: {
+        textAlign: 'right',
+        paddingLeft: 5,
+        paddingRight: 5,
     }
 });
 
 const OrdersReport = ({orders}) => (
     <Document>
         <Page size="A4" style={styles.page}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>Список продажів</Text>
+                <Text style={styles.createdAt}>Створено: {new Date().toLocaleString()}</Text>
+            </View>
             <OrdersTable orders={orders}/>
         </Page>
     </Document>

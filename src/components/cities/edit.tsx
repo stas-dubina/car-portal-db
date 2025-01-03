@@ -4,7 +4,7 @@ import React from "react";
 export const CityEdit = () => (
     <Edit mutationMode="pessimistic">
         <SimpleForm>
-            <TextInput source="name" label="Назва кольору" required={true} />
+            <TextInput source="name" label="Назва міста" required={true} />
         </SimpleForm>
     </Edit>
 );

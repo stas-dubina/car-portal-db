@@ -1,5 +1,5 @@
 import {PathParams} from "@/lib/crud_controller";
-import {crudController} from "@/app/api/car-types/controller";
+import {crudController} from "../controller";
 
 export async function GET(request: Request, context: { params: PathParams }) {
     return crudController.getOne(request, context)

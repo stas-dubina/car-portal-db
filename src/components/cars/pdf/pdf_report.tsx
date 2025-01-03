@@ -1,5 +1,5 @@
 import React from 'react';
-import {Document, Font, Page, StyleSheet} from '@react-pdf/renderer';
+import {Document, Font, Page, StyleSheet, Text, View} from '@react-pdf/renderer';
 import CarsTable from "@/components/cars/pdf/pdf_table";
 
 
@@ -36,17 +36,29 @@ const styles = StyleSheet.create({
         lineHeight: 1.5,
         flexDirection: 'column',
     },
-    logo: {
-        width: 74,
-        height: 66,
-        marginLeft: 'auto',
-        marginRight: 'auto'
+    titleContainer: {
+
+    },
+    title: {
+        fontWeight: 600,
+        textAlign: 'center',
+        paddingLeft: 5,
+        paddingRight: 5,
+    },
+    createdAt: {
+        textAlign: 'right',
+        paddingLeft: 5,
+        paddingRight: 5,
     }
 });
 
 const CarsReport = ({cars}) => (
     <Document>
         <Page size="A4" style={styles.page}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>Список автомобілів</Text>
+                <Text style={styles.createdAt}>Створено: {new Date().toLocaleString()}</Text>
+            </View>
             <CarsTable cars={cars}/>
         </Page>
     </Document>

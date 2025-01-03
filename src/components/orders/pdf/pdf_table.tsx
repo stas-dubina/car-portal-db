@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, StyleSheet } from '@react-pdf/renderer';
 import TableHeader from "./pdf_table_header";
-import TableBody from "./prd_table_body";
+import TableBody from "./pdf_table_body";
 
 const styles = StyleSheet.create({
     tableContainer: {
